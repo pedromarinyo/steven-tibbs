@@ -9,12 +9,19 @@ var sh = 1136; //Screen height, iPhone 5
 //Global Functions
 //__________________________________
 function init() {
-	//Creating:
-
+	//Initializaing...
 	//Stage
 	stage = new Kinetic.Stage({
 		container: "stage",
 		width: sw,
 		height: sh
 	});  
+
+	//Locations
+	initLoc();
+	//Items
+	initItem();
+	//Characters
+	initChar();
+
 }
