@@ -39,5 +39,76 @@
 							Ferst,							//starting location
 							{}								//items currently carrying, i.e. none;
     	);
+    	
+    	
+    	    	
+    	
+    	var Rivers = new Character(
+							"Jeniffer Rivers", 				//name
+							{								//personality vectors
+								"knd":0.9, 					//kindness
+								"van":0.8, 					//vanity
+								"hon":0.8, 				//honesty
+								"int":-0.5					//intelligence
+							}, 
+							{ 								//relationship vectors, e.g. (targetChar, cmp, dom, fam, aff, trs, dec, idb);
+								//new Relationship(Rivers, 0.6, -0.1, 0.8, 0.7, 0.4, -0.6, -0.8),
+								//new Relationship(Boomer, 0.1, -0.4, 0.9, 0.1, 0.2, -0.1, -0.4),
+							},
+							{								//knowledge nodes, e.g. (targetSubject, indirectTarget, predicateType, predicateSub, value)
+								//new Knowledge(Rivers, null, "personality", "hon", -0.4), //Tiibs believes that Rivers exibits low honesty;
+								//new Knowledge(Boomer, null, "knowledge", new knowledge(Rivers, Tibbs "relationship", "aff", -0.8)) //Tibbs believes that Dect. Boomer believes that rivers fells little affection for Tibbs.
+								//new Knowledge(Rivers, Boomer, "relationship", "dom", .9); //Tibbs believes that Rivers has a dominating relationsip with Boomer;
+							}
+							Ferst,							//starting location
+							{}								//items currently carrying, i.e. none;
+    	);
+    	
+    	
+    	
+    	var Boomer = new Character(
+							"Detective Boomer", 				//name
+							{								//personality vectors
+								"knd":-0.9, 					//kindness
+								"van":-0.5, 					//vanity
+								"hon":0, 				//honesty
+								"int":1					//intelligence
+							}, 
+							{ 								//relationship vectors, e.g. (targetChar, cmp, dom, fam, aff, trs, dec, idb);
+								//new Relationship(Rivers, 0.6, -0.1, 0.8, 0.7, 0.4, -0.6, -0.8),
+								//new Relationship(Boomer, 0.1, -0.4, 0.9, 0.1, 0.2, -0.1, -0.4),
+							},
+							{								//knowledge nodes, e.g. (targetSubject, indirectTarget, predicateType, predicateSub, value)
+								//new Knowledge(Rivers, null, "personality", "hon", -0.4), //Tiibs believes that Rivers exibits low honesty;
+								//new Knowledge(Boomer, null, "knowledge", new knowledge(Rivers, Tibbs "relationship", "aff", -0.8)) //Tibbs believes that Dect. Boomer believes that rivers fells little affection for Tibbs.
+								//new Knowledge(Rivers, Boomer, "relationship", "dom", .9); //Tibbs believes that Rivers has a dominating relationsip with Boomer;
+							}
+							Student Center,							//starting location
+							{}								//items currently carrying, i.e. none;
+    	);
+
+
+
+		var Brother = new Character(
+							"Elis Tibbs", 				//name
+							{								//personality vectors
+								"knd":1, 					//kindness
+								"van":0.2, 					//vanity
+								"hon":0.5, 				//honesty
+								"int":0					//intelligence
+							}, 
+							{ 								//relationship vectors, e.g. (targetChar, cmp, dom, fam, aff, trs, dec, idb);
+								//new Relationship(Rivers, 0.6, -0.1, 0.8, 0.7, 0.4, -0.6, -0.8),
+								//new Relationship(Boomer, 0.1, -0.4, 0.9, 0.1, 0.2, -0.1, -0.4),
+							},
+							{								//knowledge nodes, e.g. (targetSubject, indirectTarget, predicateType, predicateSub, value)
+								//new Knowledge(Rivers, null, "personality", "hon", -0.4), //Tiibs believes that Rivers exibits low honesty;
+								//new Knowledge(Boomer, null, "knowledge", new knowledge(Rivers, Tibbs "relationship", "aff", -0.8)) //Tibbs believes that Dect. Boomer believes that rivers fells little affection for Tibbs.
+								//new Knowledge(Rivers, Boomer, "relationship", "dom", .9); //Tibbs believes that Rivers has a dominating relationsip with Boomer;
+							}
+							Library,							//starting location
+							{}								//items currently carrying, i.e. none;
+    	);
+    	
 
 	} window.initChar = function initChar();
