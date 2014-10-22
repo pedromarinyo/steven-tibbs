@@ -24,4 +24,11 @@ function init() {
 	//Characters
 	initChar();
 
+	var mapOptions = {
+		center: { lat: 33.7760605, lng: -84.3993823},
+    	zoom: 16
+    };
+    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 }
+
+google.maps.event.addDomListener(window, 'load', init);
