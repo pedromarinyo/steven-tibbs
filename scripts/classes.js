@@ -25,6 +25,9 @@
         this.loc            = loc;
         this.has            = has;
 
+        this.alive          = true;
+        this.currGoal;
+
         //Retrieves personality attribute;
         this.getPersonality = function getPersonality(attribute) {
             return this.personality[attribute];
@@ -64,6 +67,17 @@
                 i++;
             }
             return false;
+        }
+
+        //Remove item from character's inventory
+        this.removeItem = function removeItem(item) {
+            var i = this.has.indexOf(item);
+            if (i > -1) { this.has.splice(index, 1);}
+        }
+
+        //Add item into character's inventory
+        this.addItem = function addItem(item) {
+            this.has.push(item);
         }
 
         //Check if this character shares the same location as another character
@@ -160,7 +174,7 @@
     */
     function Loc(name, coordinates) {
         this.name           = name;
-        this.coordinates    = coordinates;
+        this.coor           = coordinates;
     }
     window.Loc = Loc;
 
@@ -169,18 +183,17 @@
     --
     Constructor: (
         name                //actions's name
-        parent              //actions's parent in hierarchy
-        child               //action's child in hierarchy
         preconditions       //action's preconditions
         effects             //action's effects
     )
     */
-    function Action(name, parent, child, preconditions, effects) {
+    function Action(name, preconditions, effects) {
         this.name           = name;
-        this.parent         = parent;
-        this.child          = child;
         this.preconditions  = preconditions;
         this.effects        = effects;
+
+        this.userChar;
+        this.targetChar;
     }
     window.Action = Action;
 
@@ -189,7 +202,7 @@
     --
     Constructor: (
         name                //goal's name
-        parent              //goal's parent i goal hierarchy
+        parent              //goal's parent in goal hierarchy
         child               //goal's child in goal hierarchy
         operators           //potential actions for accomplising goal
     )
