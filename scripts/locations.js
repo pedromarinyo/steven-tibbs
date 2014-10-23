@@ -24,60 +24,52 @@ function initLoc() {
                             "long": 896.82938
                         }                  
     );
+
+    library = new Loc(
+                        "Library",                              //name
+                        {                                       //locaton's coordinates
+                            "lat": 90.839273, 
+                            "long": 896.82938
+                        }                  
+    );
+
+    fountain = new Loc(
+                        "Fountain",                             //name
+                        {                                       //locaton's coordinates
+                            "lat": 90.839273, 
+                            "long": 896.82938
+                        }                  
+    );
+
+    studentCenter = new Loc(
+                        "Student Center",                       //name
+                        {                                       //locaton's coordinates
+                            "lat": 90.839273, 
+                            "long": 896.82938
+                        }                  
+    );
+
+    clough = new Loc(
+                        "Clough",                               //name
+                        {                                       //locaton's coordinates
+                            "lat": 90.839273, 
+                            "long": 896.82938
+                        }                  
+    );
+
+    skiles = new Loc(
+                        "Skiles",                               //name
+                        {                                       //locaton's coordinates
+                            "lat": 90.839273, 
+                            "long": 896.82938
+                        }                  
+    );
+
+    healthCenter = new Loc(
+                        "Health Center",                       //name
+                        {                                       //locaton's coordinates
+                            "lat": 90.839273, 
+                            "long": 896.82938
+                        }                  
+    );
 } 
-
-
-<<<<<<< HEAD
-=======
-        var Ferst = new Loc(
-                            "Ferst Center for the Arts",            //name
-                            {90.839273, 896.82938}                  //locaton's coordinates
-        );
-        
-        
-         var Library = new Loc(
-                            "Library",            //name
-                            {90.839273, 896.82938}                  //locaton's coordinates
-        );
-        
-        
-         var Fountain = new Loc(
-                            "Fountain",            //name
-                            {90.839273, 896.82938}                  //locaton's coordinates
-        );
-        
-        
-         var StudentCenter = new Loc(
-                            "Student Center",            //name
-                            {90.839273, 896.82938}                  //locaton's coordinates
-        );
-        
-        
-         var Clough = new Loc(
-                            "Clough",            //name
-                            {90.839273, 896.82938}                  //locaton's coordinates
-        );
-        
-        
-         var VanLeer = new Loc(
-                            "VanLeer",            //name
-                            {90.839273, 896.82938}                  //locaton's coordinates
-        );
-        
-        
-         var Skiles = new Loc(
-                            "Skiles",            //name
-                            {90.839273, 896.82938}                  //locaton's coordinates
-        );
-        
-        
-         var HealthCenter = new Loc(
-                            "HealthCenter",            //name
-                            {90.839273, 896.82938}                  //locaton's coordinates
-        );
-        
-    
-        
-        
-    } window.initLoc = function initLoc();
->>>>>>> FETCH_HEAD

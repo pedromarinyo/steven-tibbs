@@ -12,17 +12,17 @@ function initActions() {
 
     actionLibrary = 
         {
-            "shootGun": new action(                         //Shoot gun
+            "shootGun": new action(                             //Shoot gun
                 "shootGun",
-                {                                           //Preconditions
-                    userChar.checkProx,                     //Check that user and target share the same location;
-                    userChar.checkItem(gun),                //Check that the user has a gun;
-                    userChar.checkItem(ammo),               //Check that the user has ammo;
-                    targetChar.alive                        //Check that the target character is alive;
-                },
-                function effects(userChar, targetChar){     //Effects
-                    targetChar.alive = false;               //Target character is dead;
-                    userChar.removeItem(ammo);              //User character no longer has ammo;
+                [                                               //Preconditions
+                    this.userChar.checkProx(targetChar),        //Check that user and target share the same location;
+                    this.userChar.checkItem(gun),               //Check that the user has a gun;
+                    this.userChar.checkItem(ammo),              //Check that the user has ammo;
+                    this.targetChar.alive                       //Check that the target character is alive;
+                ],
+                function effects(userChar, targetChar){         //Effects
+                    this.targetChar.alive = false;              //Target character is dead;
+                    this.userChar.removeItem(ammo);             //User character no longer has ammo;
                 }            
             )
         }

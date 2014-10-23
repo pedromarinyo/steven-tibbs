@@ -194,6 +194,16 @@
 
         this.userChar;
         this.targetChar;
+
+        //Set action's target character
+        this.setTarget = function setTarget(character) {
+            this.targetChar = character;
+        };
+
+        //Set action's user character
+        this.setUser = function setTarget(character) {
+            this.userChar = character;
+        };
     }
     window.Action = Action;
 

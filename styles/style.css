@@ -1,5 +1,24 @@
-html, body, #map-canvas {
-	height: 100%;
-	margin: 0;
-	padding: 0;
+html, body {
+	width: auto;
+	height: auto;
+	text-align: center;
+	
+	margin: 0px;
+	padding: 0px;
+}
+
+#wrapper {
+	width: 320px;
+	height: 568px;
+	text-align: left;
+	overflow: hidden;
+	
+	margin: 24px auto;
+	padding: 0 12px;
+}
+
+#map-canvas {
+	margin: 12px 0px;
+	width: 100%;
+	height: 400px;
 }
