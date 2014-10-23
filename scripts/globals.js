@@ -29,6 +29,47 @@ function init() {
     	zoom: 16
     };
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+    
+    
 }
 
 google.maps.event.addDomListener(window, 'load', init);
+
+
+function simulatestory() {
+
+/* will be added with story simulation ....
+1. First, find the villain and method by AI. 
+2. Explain how and where he kills by tracking the item. 
+*/
+
+
+ quest();
+}
+
+function quest() {
+ /* will be added with quest generation ....
+ 
+*/
+
+
+}
+
+
+
+///// button interface and functions
+
+$('#startbutton').click(function () {
+ var $this = $(this);
+  simluatestory();
+  stage_state="1";
+  $('#startbutton').text('next');    
+    $('#startbutton').id='next';
+})
+
+
+
+$('#next').click(function () {
+ // check location, stage, and provide next quest or see whether mission is accomplished. 
+ 
+ })
