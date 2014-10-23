@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>The Mysterious Affair of Steven Tibbs</title>
+    <title id="title">The Mysterious Affair of Steven Tibbs</title>
     
     <!-- Styles-->
     <link type="text/css" rel="stylesheet" href="./styles/reset.css" />
@@ -10,6 +10,7 @@
     <!--Libraries-->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script> <!-- JQuery -->
     <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v5.0.1.min.js"></script> <!-- Kinectic.js -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"> <!--bootstrap--> 
     
     <!--Custom Scripts-->
     <script type="text/javascript" src="./scripts/classes.js" defer="defer"></script>
@@ -17,11 +18,23 @@
     <script type="text/javascript" src="./scripts/locations.js" defer="defer"></script>
     <script type="text/javascript" src="./scripts/items.js" defer="defer"></script>
     <script type="text/javascript" src="./scripts/globals.js" defer="defer"></script>
-</head>
+    <script type="text/javascript" src="./scripts/classes.js" defer="defer"></script>
+    <script type="text/javascript" src="./scripts/characters.js" defer="defer"></script>
+    <script type="text/javascript" src="./scripts/items.js" defer="defer"></script>
+    <script type="text/javascript" src="./scripts/locations.js" defer="defer"></script> 
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSpdX8vbTKaI2l89ZL2MFYIYpWrHM2aAw"></script>
 
-<body onLoad="init()">
+</head>
+ 
+  <body onLoad="init()"> 
 	<div id="wrapper">
-        <div id="stage"></div>    
+        <div id="stage"> 
+        <img id="mainimage" src="img/main.jpg"> 
+        <span id="text">Steven Tibbs, CEO and billionaire philanthropist, disappears during Georgia Tech visit! You are missioned to find out who is the culprit and identify his/her motive </span>
+        <button id="startbutton" type="button" class="btn btn-primary btn-lg">StartGame</button></div>  
+          
+    </div>
+    <div id="map-canvas">
     </div>
 </body>
 
