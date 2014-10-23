@@ -3,8 +3,8 @@
 var stage;
 var stage_state = "root";
 
-var sw = 375; //Screen width, iPhone 5
-var sh = 667; //Screen height, iPhone 5
+var sw = 320; //Screen width, iPhone 5
+var sh = 568; //Screen height, iPhone 5
 
 //Location declarations
 var ferst, vanLeer, library, studentCenter, healthCenter, skiles, clough;	
