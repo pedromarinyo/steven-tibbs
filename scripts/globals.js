@@ -29,20 +29,43 @@ function init() {
 
 	
 	//Locations
-	initLoc();
+	//initLoc();
 	//Items
-	initItem();
+	//initItem();
 	//Characters
-	initChar();
+	//initChar();
+	
+	initMap();
+}
 
-	//Map
+function initMap(){
 	var mapOptions = {
 		center: { lat: 33.7760605, lng: -84.3993823},
-    	zoom: 16
-    };    
-    
+		zoom: 14
+	};
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	
+    var library = new google.maps.Marker({
+    	position: new google.maps.LatLng(33.774336,-84.39577),
+    	map: map,
+    	title: "library"
+	});
+	var ferst = new google.maps.Marker({
+    	position: new google.maps.LatLng(33.774926,-84.3992097),
+    	map: map,
+    	title: "Ferst Center for the Arts"
+	});
+	google.maps.event.addListener(library, 'click', function() {
+		var infowindow = new google.maps.InfoWindow({
+      		content: "<h4>Library</h4>"
+  		});
+    	infowindow.open(map,library);
+	});
+	google.maps.event.addListener(ferst, 'click', function() {
+		var infowindow = new google.maps.InfoWindow({
+      		content: "<h4>Ferst Center for the Arts</h4>"
+  		});
+    	infowindow.open(map,ferst);
+	});
 }
 
 
