@@ -22,3 +22,22 @@ html, body {
 	width: 100%;
 	height: 400px;
 }
+
+#quest {
+	width: 100%;
+	height: 100%;
+}
+
+#questTop {
+	width: 100%;
+	height: 50%;
+}
+
+#questBottom {
+	width: 100%;
+	height: 50%;
+}
+
+#next_btn {
+	float: right;
+}
