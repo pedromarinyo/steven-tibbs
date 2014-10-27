@@ -8,6 +8,8 @@ var sh = 568; //Screen height, iPhone 5
 
 //Location declarations
 var ferst, vanLeer, library, studentCenter, healthCenter, skiles, clough;	
+var locations;
+var locationMarkers=[]
 
 //Item declarations
 var gun, poison, injection, ammo, rope, bat;	
@@ -29,11 +31,12 @@ function init() {
 
 	
 	//Locations
-	//initLoc();
+	initLoc();
+	locations = [ferst, vanLeer, library, studentCenter, healthCenter, skiles, clough];
 	//Items
-	//initItem();
+	initItem();
 	//Characters
-	//initChar();
+	initChar();
 	
 	initMap();
 }
@@ -44,28 +47,20 @@ function initMap(){
 		zoom: 14
 	};
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    var library = new google.maps.Marker({
-    	position: new google.maps.LatLng(33.774336,-84.39577),
-    	map: map,
-    	title: "library"
-	});
-	var ferst = new google.maps.Marker({
-    	position: new google.maps.LatLng(33.774926,-84.3992097),
-    	map: map,
-    	title: "Ferst Center for the Arts"
-	});
-	google.maps.event.addListener(library, 'click', function() {
-		var infowindow = new google.maps.InfoWindow({
-      		content: "<h4>Library</h4>"
-  		});
-    	infowindow.open(map,library);
-	});
-	google.maps.event.addListener(ferst, 'click', function() {
-		var infowindow = new google.maps.InfoWindow({
-      		content: "<h4>Ferst Center for the Arts</h4>"
-  		});
-    	infowindow.open(map,ferst);
-	});
+    for (i in locations){
+    	var marker = new google.maps.Marker({
+    		position: new google.maps.LatLng(locations[i].coor.lat,locations[i].coor.long),
+    		map: map,
+    		title: locations[i].name
+		});
+		google.maps.event.addListener(marker, 'click', function() {
+			var infowindow = new google.maps.InfoWindow({
+      			content: "<h4>"+this.title+"</h4>"
+  			});
+    		infowindow.open(map,this);
+		});
+		locationMarkers.push(marker);
+    }
 }
 
 
