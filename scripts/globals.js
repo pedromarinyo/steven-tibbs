@@ -65,26 +65,9 @@ function initMap(){
 
 
 
-//Initiate simulation
-function initSim() {}
-
-//Initiate quest generation
-function initQuest() {}
-
+ 
 //Button interface, functions
-$('#startbutton').click(function () {
-	var $this = $(this);
-	
-	simulateStory();
-	
-	$('#startbutton').text('next');    
-	$('#startbutton').id='next';
-});
 
-
-$('#next').click(function () {
-	//Check location, stage, and provide next quest or see whether mission is accomplished. 
-});
 
 $('#startSimulation_btn').click(function () {
 	document.getElementById('stage').style.display="none";
