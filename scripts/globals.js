@@ -6,11 +6,11 @@ var stage_state = "root";
 var sw = 320; //Screen width, iPhone 5
 var sh = 568; //Screen height, iPhone 5
 
-<<<<<<< HEAD
+//<<<<<<< HEAD
 var ll = new Object(); //Location library
 var il = new Object(); //Item library
 var cl = new Object(); //Characters library
-=======
+//=======
 //Location declarations
 var ferst, vanLeer, library, studentCenter, healthCenter, skiles, clough;	
 var locations;
@@ -71,7 +71,7 @@ function initMap(){
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     for (i in locations){
     	var marker = new google.maps.Marker({
-    		position: new google.maps.LatLng(locations[i].coor.lat,locations[i].coor.long),
+    	 	position: new google.maps.LatLng(locations[i].coor.lat,locations[i].coor.long),
     		map: map,
     		title: locations[i].name
 		});
