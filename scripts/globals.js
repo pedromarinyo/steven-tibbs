@@ -121,6 +121,7 @@ $('#next_btn').click(function () {
 });
 
 $('#next_quest').click(function () {
+	alert("You got the clue: Steven Tibbs has never been to Ferst Center for Arts")
 	document.getElementById('stage').style.display="none";
 	document.getElementById('quest').style.display="initial";
 });
