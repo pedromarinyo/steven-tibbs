@@ -22,6 +22,33 @@ car
         this.allEvidences = new Array();
         
         // Generate all possible evidences
+        switch (this.tool){
+        	case "gun":
+        		this.allEvidences.push("Evidence: bullet");
+        		this.allEvidences.push("Evidence: gun");
+        		this.allEvidences.push("Evidence: Tibb mentioned in his talk to thank his family");
+        		this.allEvidences.push("Evidence: information about gun dealer");
+        		this.allEvidences.push("Evidence: Tibb's password and email");
+        		break;
+        	case "poison":
+        		this.allEvidences.push("Evidence: broken wine glass");
+        		this.allEvidences.push("Evidence: the note about the poison");
+        		this.allEvidences.push("Evidence: Tibb mentioned in his talk to thank his family");
+        		this.allEvidences.push("Evidence: the location of Tibb's diary");
+        		break;
+        	case "bat":
+        	
+        		break;
+        	case "injection":
+        	
+        		break;
+        	case "rope":
+        	
+        		break;
+        	case "car":
+        	
+        		break;
+        }
         this.allEvidences.push("Evidence: " + this.tool);
         
         
@@ -35,6 +62,27 @@ car
         var evidenceRequired = new Array();
         var award = "Evidence: " + this.tool;
         this.allQuests.push(new quest(name, description, destination, evidenceRequired, award));
+        
+        switch (this.tool){
+        	case "gun":
+        	
+        		break;
+        	case "poison":
+        	
+        		break;
+        	case "bat":
+        	
+        		break;
+        	case "injection":
+        	
+        		break;
+        	case "rope":
+        	
+        		break;
+        	case "car":
+        	
+        		break;
+        }
         
         
         this.nextQuests = function nextQuests() {
@@ -60,20 +108,7 @@ car
         	this.evidenceAccomplished.push(quest.award);
         }
 	}
-	
-// 	function tool(name, evidence) {
-//         this.name     = name;
-//         this.evidence=evidence;
-//         
-//         this.questAccomplished = new Array();
-//         this.questTried = new Array();   
-//     }   
-//         
-// 	function inspecttools(name, clue) {
-//         this.name     = name;
-//     	this.clue	  = clue;
-// 	}
-  
+ 
 	function quest(name, description, destination, evidenceRequired, award){
 		this.name = name;
 		this.description = description;
@@ -82,93 +117,4 @@ car
 		this.award = award;
 	}
         
-}(window));   //but i dont understand what this window stuff is doing. do i need it to make a class? 
-       
-        
-        
-        ////
-
-function initquest(tool, killer, crimescene) {
-this.tool=tool;
-this.killer=killer;
-this.crimescene=crimescene;
-
-this.knowtool=false;
-this.knowkiller=false;
-this.knowlocation=false;    
-this.knowwhy=false;    
-
- 
-
-
-itemrequirements(); 
-}
-
-  function itemrequirements(){
-
-  switch(this.tool) {
-  case "gun":
-  fingerprint;
-  
-  break;
-  
-  
-  case "poison":
-  
-  break;
-  
-  
-    case "bat":
-  
-  break;
-  
-  
-    case "injection":
-  
-  break;
-  
-  
-    case "rope":
-  
-  break;
-  }
-  
-  
-
-
-function givequest(step){
- 
-
-  switch(step) {
-  case "finditem":
-  
-  
-  break;
-  
-  
-  case "inspectitem":
-  
-  break;
-  
-  
- case "meetdetective":
-  
-  break;
-  
-  
-  case "inspectcollaborator":
-  
-  break;
-  
-  
- case "meetfamily":
-  
-  break;
-  
-  
- case "findmessage":
-  
-  break;
-  
-  }
-  
+}(window));
