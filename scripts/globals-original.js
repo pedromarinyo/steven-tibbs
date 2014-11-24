@@ -101,3 +101,27 @@ function initSim() {
 }
 
  
+//Button interface, functions
+$('#startSimulation_btn').click(function () {
+	document.getElementById('stage').style.display="none";
+	document.getElementById('quest').style.display="initial";
+});
+
+$('#next_btn').click(function () {
+	document.getElementById('quest').style.display="none";
+	document.getElementById('stage').style.display="initial";
+	document.getElementById('stageTop').style.display="none";
+	document.getElementById('guide').style.display="initial";
+	
+	for (i in locationMarkers){
+		if (i!=0){
+			locationMarkers[i].setMap(null);
+		}
+	}
+});
+
+$('#next_quest').click(function () {
+	alert("You got the clue: Steven Tibbs has never been to Ferst Center for Arts")
+	document.getElementById('stage').style.display="none";
+	document.getElementById('quest').style.display="initial";
+});

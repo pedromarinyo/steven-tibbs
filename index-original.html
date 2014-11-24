@@ -24,15 +24,13 @@
     <script type="text/javascript" src="./scripts/actionsGoals.js" defer="defer"></script>
     <script type="text/javascript" src="./scripts/globals.js" defer="defer"></script>
     <script type="text/javascript" src="./scripts/quest.js" defer="defer"></script>
-	<script type="text/javascript" src="./scripts/interface.js" defer="defer"></script>
-
 </head>
  
   <body onLoad="init()"> 
 	
     <div id="wrapper">
         <div id="stage">
-        	<!--<div id="stageTop">
+        	<div id="stageTop">
             	<h3>The Mysterious Affair of Steven Tibbs</h3>
             	<p id="message">Steven Tibbs, CEO and billionaire philanthropist, disappears during his Georgia Tech visit. Your mission is to: </p>
             
@@ -45,10 +43,7 @@
             	<button id="startSimulation_btn" type="button">Start Game</button>
             </div>
             
-             <div id="guide" style="display:none;">
-          
-           
-             
+            <div id="guide" style="display:none;">
             	<h3>The Mysterious Affair of Steven Tibbs</h3>
             	<p id="guideMessage">Steven Tibbs disappears when giving a speech in Ferst Center for the Arts. Let's go there to see what happens</p>
             	<button id="next_quest" style="float:left;">Finish quest</button>
@@ -57,24 +52,15 @@
             </div>
 
             <div id="map-canvas"></div>
-              -->
-              
         </div>
-       
         
-           
-        <div id="quest"  >
-       
+        <div id="quest" style="display:hidden;">
         	<div id="questTop">
-        	<center><img src="img/banner.jpg" id="banner"> </img> </center>
-       
-        		<center><img src="img/background-auditorium.jpg" id="bg"> </img> <img src="img/character-tibbs.png" id="character" style="position:relative; top:-160px; width:110px; margin-bottom:-110px;"  ></img></center>
+        		<img src="img/Ferst.jpg" height="280px"></img>
         	</div>
-        	
-        	<div id="questBottom"> 
-        		<p id="questMessage">Steven Tibbs, CEO and billionaire philanthropist, disappears when giving a speech in Ferst Center for the Arts. Let's go there to see what happens!</p>
-        		<button id="next_btn" type="button">NEXT</button>
-        		
+        	<div id="questBottom">
+        		<p id="questMessage">Steven Tibbs, CEO and billionaire philanthropist, disappears when giving a speech in Ferst Center for the Arts. Let's go there to see what happens</p>
+        		<button id="next_btn" type="button">Next</button>
         	</div>
         </div>
     </div>

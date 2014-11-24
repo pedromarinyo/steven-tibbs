@@ -5,21 +5,16 @@ html, body {
 	
 	margin: 0px;
 	padding: 0px;
-	
-	
 }
 
 #wrapper {
 	width: 320px;
-    height: 568px;  
-	
+	height: 568px;
 	text-align: left;
 	overflow: hidden;
 	
 	margin: 24px auto;
-	 padding: 0 12px;  
-	
-	 
+	padding: 0 12px;
 }
 
 #map-canvas {
@@ -35,25 +30,14 @@ html, body {
 
 #questTop {
 	width: 100%;
-	/* height: 50%;  */
-	
+	height: 50%;
 }
 
 #questBottom {
 	width: 100%;
-	/* height: 50%;  */
+	height: 50%;
 }
-
-#questMessage {
-font-size:14px;
-}
-
 
 #next_btn {
-	text-align:right;
-	float:right;
-	 width:100%;
-	padding:5px 15px;
-	margin:5px 5px; 
+	float: right;
 }
-
