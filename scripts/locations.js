@@ -11,7 +11,7 @@ function initLoc() {
     ll = 
     {
         "ferst": new Loc(
-            "the Ferst Center for the Arts",            //name
+            "the Ferst Center for the Arts",        //name
             {                                       //locaton's coordinates
                 "lat": 33.775071, 
                 "long": -84.399250

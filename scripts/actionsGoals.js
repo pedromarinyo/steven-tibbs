@@ -91,8 +91,8 @@ function initActions() {
                 {"character": "userChar", "attr": "alive", "value": true}, //Check that the user character is alive;
                 {"character": "targetChar", "attr": "prox", "value": true} //Check that the user and item are in the same location;
             ],
-            [ ///Effects description
-                {"character": "userChar", "attr": "has", "value": "targetChar"} //userChar no longer has ammo
+            [ //Effects description
+                {"character": "userChar", "attr": "has", "value": "targetChar"}
             ],
             function effects(){ //Effects function
                 this.userChar.addItem(this.targetChar);
@@ -102,7 +102,111 @@ function initActions() {
             function duration() {
                 return 2;
             }          
-        ),       
+        ), 
+
+        "stealItemFromChar": new Action( //Steal an item from a character
+            "stealItemFromChar",
+            [ //Preconditions
+                {"character": "userChar", "attr": "prox", "value": "targetChar"}, //User and targetChar are in the same location.
+                {"character": "userChar", "attr": "hon", "value": -0.5} //User has a dishonest personality
+            ],
+            [ //Effects description
+                {"character": "userChar", "attr": "has", "value": "targetChar"} //User has targetItem
+            ],
+            function effects() {},
+            function duration() { return 5;}
+        ),
+
+        "stealItemFromBlackmarket ": new Action (
+            "stealItemFromBlackmarket",
+            [ //Preconditions
+                {"character": "userChar", "attr": "int", "value": 0.5} //User is very intelligent.
+            ],
+            [ //Effects description
+                {"character": "userChar", "attr": "has", "value": "targetChar"} // User has targetItem
+            ],
+            function effects() {},
+            function duration() { return 20;}
+        ),
+
+        "askAboutCharItem": new Action(
+            "askAboutCharItem",
+            [ //Preconditions
+                {"character": "userChar", "attr": "alive", "value": true} //User is alive
+            ],
+            [ //Effects description
+                {"character": "userChar", "attr": "learns", "value": "targetChar"} //User learn's location of item.
+            ],
+            function effects() {
+                //Decide which character to ask, from list of known characters and locations. 
+                var askChar = this.userChar.decide(); //Decide based on nearest character and most affectionate, weighed in decision heuristic.
+                
+                //Call character 
+                console.log("Minute " + currTime + ": " + this.userChar.name + " calls " + askChar.name + " to ask about " + this.targetChar.name);
+                //askChar learns that user is looking for item.
+                console.log(askChar.name + " learns that " + this.userChar.name + " is asking after the " + this.targetChar.name);
+                askChar.knowledge.push(new Knowledge(this.userChar, null, "asked", null, this.targetChar));
+                //askChar plans reponse. 
+                askChar.planResponse(this.askChar, this.targetChar); 
+            },
+            function duration() { return 0; }
+        ),
+            
+        "lieAboutItem": new Action(
+            "lieAboutItem",
+            [ //Preconditons
+                {"character": "userChar", "attr": "hon", "value": -0.5}, //User has low honesty.
+                {"character": "userChar", "attr": "prox", "value": "targetChar"} //User and targetChar are in the same location.
+            ],
+            [ //Effects description
+                {"character": "userChar", "attr": "respond", "value": "targetChar"} //User responds to targetChar.
+            ],
+            function effects() {},
+            function duration() { return 4; }
+        ),
+
+        "tellAboutItem": new Action(
+            "tellAboutItem",
+            [ //Preconditions
+                {"character": "userChar", "attr": "prox", "value": "targetChar"} //User and targetChar are in the same location.
+            ],
+            [ //Effects description.
+                {"character": "userChar", "attr": "respond", "value": "targetChar"} //User responds to targetChar.
+            ],
+            function effects() {
+                
+                console.log("Minute " + currTime + ": " + this.userChar.name + " responds truthfully"); 
+                if (!this.userChar.checkKnow(this.targetItem, "loc")) { //If user doesn't know location of item in question...
+                    console.log(this.userChar.name + " says s/he doesn't know the location of the " + this.targetItem.name);
+                    return "fail";
+                } 
+            },
+            function duration() { return 5; }
+        ),
+
+        "ignoreAsk": new Action(
+            "ignoreAsk",
+            [ //Preconditions
+                {"character": "userChar", "attr": "prox", "value": "targetChar"}, //User and targetChar are in the same location.
+                {"character": "userChar", "attr": "knd", "value": -0.5} //User is unkind. 
+            ], 
+            [ //Effects description
+                {"character": "userChar", "attr": "respond", "value": "targetChar"} //User reponds to targetChar. 
+            ], 
+            function effects(){}, 
+            function duration() { return 5; }
+        ),
+
+        "buyItemFromBlackmarket": new Action(
+            "buyItemFromBlackmarket", 
+            [ //Preconditions
+                {"character": "userChar", "attr": "knowsLoc", "value": "blackmarket"}
+            ], 
+            [
+                {"character": "userChar", "attr": "has", "value": "targetChar"} //User has targetItem
+            ]
+        )
+            
     }
 }
 
@@ -125,9 +229,9 @@ function initGoals() {
             "live",
             null, //parent
             [], //children
-            "or",
+            "or", //and/or property
             [], //desired effects
-            null
+            null //
         ),
 
         "wait": new Goal(
@@ -139,8 +243,21 @@ function initGoals() {
             null
         ),
 
+        "respond": new Goal(
+            "respond",
+            null,
+            [
+                {character: "userChar", attr: "alive", value: true}
+            ],
+            "and",
+            [
+                {character: "userChar", attr: "respond", value: "targetChar"}
+            ],
+            null
+        ),
+
         "killTibbs": new Goal(
-            "kill Tibbs",
+            "celebrate her victory!",
             null,
             [
                 "shootTibbs",
@@ -191,12 +308,23 @@ function initGoals() {
         ),
 
         "moveToGun": new Goal(
-            "move to the gun",
-            "getGun",
+            "move to the gun", //Name
+            "getGun", //Parent
+            ["learnGunLoc"], //Children
+            "and", // And/or 
+            [ //Desired effects
+                {"character": il.gun, "attr": "prox", "value": true}
+            ],
+            null
+        ),
+
+        "learnGunLoc": new Goal(
+            "learn the gun's location",
+            "moveToGun",
             [],
             "and",
             [
-                {"character": il.gun, "attr": "prox", "value": true}
+                {"character": "userChar", "attr": "learns", "value": il.gun}
             ],
             null
         ),
