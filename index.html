@@ -28,7 +28,7 @@
 
 </head>
  
-  <body onLoad="init()"> 
+  <body onLoad="init(); moveNext(); recordselection('None');"> 
 	
     <div id="wrapper">
         <div id="stage">
@@ -56,7 +56,7 @@
             	<br/>
             </div>
 
-            <div id="map-canvas"></div>
+            
               -->
               
         </div>
@@ -66,14 +66,16 @@
         <div id="quest"  >
        
         	<div id="questTop">
-        	<center><img src="img/banner.jpg" id="banner"> </img> </center>
+        	<!--<center><img src="img/banner.jpg" id="banner"> </img> </center> -->
        
-        		<center><img src="img/background-auditorium.jpg" id="bg"> </img> <img src="img/character-tibbs.png" id="character" style="position:relative; top:-160px; width:110px; margin-bottom:-110px;"  ></img></center>
-        	</div>
+        		<!--<center><img src="img/background-auditorium.jpg" id="bg"> </img> <img src="img/character-tibbs.png" id="character" style="position:relative; top:-160px; width:110px; margin-bottom:-110px;"  ></img></center> -->
+         	</div>
+         	<div id="map-canvas"></div>
+        	
         	
         	<div id="questBottom"> 
-        		<p id="questMessage">Steven Tibbs, CEO and billionaire philanthropist, disappears when giving a speech in Ferst Center for the Arts. Let's go there to see what happens!</p>
-        		<button id="next_btn" type="button">NEXT</button>
+        		 <p id="questMessage">Quest goes here</p>
+        		   <div id="btn"> </div>
         		
         	</div>
         </div>

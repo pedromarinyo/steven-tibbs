@@ -71,9 +71,9 @@ function initMap(){
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     for (i in locations){
     	var marker = new google.maps.Marker({
-    	 	position: new google.maps.LatLng(locations[i].coor.lat,locations[i].coor.long),
+    	 	//position: new google.maps.LatLng(locations[i].coor.lat,locations[i].coor.long),
     		map: map,
-    		title: locations[i].name
+    		//title: locations[i].name
 		});
 		google.maps.event.addListener(marker, 'click', function() {
 			var infowindow = new google.maps.InfoWindow({
