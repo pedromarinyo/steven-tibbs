@@ -119,7 +119,7 @@ function recordselection(selection) {
         $('#next').text("Go to dealership "); 
         	break; 
 
-case "quest3clue-map":
+case "quest4clue-map":
         	 $('#questTop').empty();
         	 $('#map-canvas').show();  
         	 $('#questMessage').text( "You want to  visit the dealership. it is in this location. press button when you arrive  " );
