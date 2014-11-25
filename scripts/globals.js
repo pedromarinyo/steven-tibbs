@@ -227,13 +227,18 @@ function geolocWatch() { //For constant geoloc information.
 	if (!watchSwitch) {
 		if (navigator.geolocation) { navigator.geolocation.watchPosition(updateMap);} 
 	    else {alert('not supported');}
+	    $("#watchBtn").prop('value', 'Stop Watching');
+	    watchSwitch = true;
 	} else {
-		navigator.geolocation.clearWatch();
+		navigator.geolocation.clearWatch(updateMap);
+		$("#watchBtn").prop('value', 'Watch Location');
+		watchSwitch = false;
 	}
 }
 
 function updateMap(pos) {
 	player.setCoords(pos);
+	console.log(pos);
 }
 
 //Simulation

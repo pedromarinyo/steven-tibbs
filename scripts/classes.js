@@ -647,7 +647,11 @@ function Player() {
         this.marker = new google.maps.Marker({
             position: map.getCenter(),
             map: map,
-            title: 'Player'
+            title: 'Player',
+            icon: {
+                scaledSize: new google.maps.Size(40, 55),
+                url: "img/marker.png" 
+            }
         });
     }
 
