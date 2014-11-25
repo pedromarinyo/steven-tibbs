@@ -11,6 +11,10 @@ var ll = new Object(); //Location library
 var il = new Object(); //Item library
 var cl = new Object(); //Characters library
 
+var quest1,quest2,quest3,quest4,deathInfo;
+
+var tool,crimescene,killer;
+
 //Location declarations
 var ferst, vanLeer, library, studentCenter, healthCenter, skiles, clough;	
 var locations;
@@ -40,13 +44,6 @@ function init() {
 	//Goals
 	initGoals();
 	
-	//Map
-	var mapOptions = {
-		center: { lat: 33.7760605, lng: -84.3993823},
-    	zoom: 16
-    };    
-    var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	
     //For Testing
     cl.rivers.addItem(il.ammo);
     cl.rivers.setCurrGoal("killTibbs");
@@ -54,7 +51,7 @@ function init() {
     cl.elis.setCurrGoal("wait");
     cl.boomer.setCurrGoal("wait");
 
-	locations = [ferst, vanLeer, library, studentCenter, healthCenter, skiles, clough];
+	locations = [ll.ferst, ll.vanLeer, ll.library, ll.studentCenter, ll.healthCenter, ll.skiles, ll.clough];
 	//Items
 	initItem();
 	//Characters
@@ -71,9 +68,9 @@ function initMap(){
     var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
     for (i in locations){
     	var marker = new google.maps.Marker({
-    	 	//position: new google.maps.LatLng(locations[i].coor.lat,locations[i].coor.long),
+    	 	position: new google.maps.LatLng(locations[i].coor.lat,locations[i].coor.long),
     		map: map,
-    		//title: locations[i].name
+    		title: locations[i].name
 		});
 		google.maps.event.addListener(marker, 'click', function() {
 			var infowindow = new google.maps.InfoWindow({
@@ -98,6 +95,8 @@ function initSim() {
 		}
 		currTime++;
 	} 
+	
+	var questGen = new questGenerator(tool, killer, crimescene);
 }
 
  

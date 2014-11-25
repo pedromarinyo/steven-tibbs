@@ -116,5 +116,11 @@ car
 		this.evidenceRequired = evidenceRequired;
 		this.award = award;
 	}
+	
+	//define the 4 quests
+	quest1=
+	quest2=
+	quest3=
+	quest4=
         
 }(window));
