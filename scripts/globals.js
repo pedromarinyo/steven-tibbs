@@ -13,8 +13,8 @@ var ll = new Object(); //Location library
 var il = new Object(); //Item library
 var cl = new Object(); //Characters library
 
+//Quest declarations
 var quest1,quest2,quest3,quest4,deathInfo;
-
 var tool,crimescene,killer;
 
 //Location declarations
@@ -22,6 +22,9 @@ var locationMarkers = [];
 
 //Time scale, actions, goals
 var currTime, al, gl;
+
+//For testing
+var watchSwitch = false;
 
 //Global Functions
 //__________________________________
@@ -58,7 +61,7 @@ function init() {
     cl.elis.setCurrGoal("wait");
     cl.boomer.setCurrGoal("wait");
 
-    //initSim();	
+    //initSim();
 }
 
 //Map, map functions
@@ -200,7 +203,7 @@ function initMap(){
 	map.setOptions({styles: styles});
 }
 
-function geolocCheck(loc) {
+function geolocCheck() {
 	if (navigator.geolocation) { navigator.geolocation.getCurrentPosition(geolocSuccess);} 
     else {alert('not supported');}
 }
@@ -208,11 +211,25 @@ function geolocCheck(loc) {
 function geolocSuccess(pos) {
 	player.setCoords(pos); //Update player's position.
 	map.panTo(player.position); //Pan map to player's position.
+
+	var locCheck = ll[$('input[name="loc"]:checked').val()];
+	var locCoords = new google.maps.LatLng(locCheck.coor.lat, locCheck.coor.long);
+
+	var distance = google.maps.geometry.spherical.computeDistanceBetween(locCoords, player.position);
+	
+
+	if (distance < 200) {alert("You're here! You're " + distance + " meters away.");}
+	else {alert("Nope! You're " + distance + " meters away.");}
+	
 }
 
 function geolocWatch() { //For constant geoloc information.
-	if (navigator.geolocation) { navigator.geolocation.watchPosition(updateMap);} 
-    else {alert('not supported');}
+	if (!watchSwitch) {
+		if (navigator.geolocation) { navigator.geolocation.watchPosition(updateMap);} 
+	    else {alert('not supported');}
+	} else {
+		navigator.geolocation.clearWatch();
+	}
 }
 
 function updateMap(pos) {
