@@ -31,20 +31,19 @@
 
 </head>
 
-<!--<body onLoad="init(); initInterface(); recordselection('None');">-->
-<body onLoad="init();">
-	<div id="wrapper">
+ <body onLoad="init(); initInterface();   recordselection('next'); "> 
+ <!-- <body onLoad="init(); initInterface();  recordselection('next'); "> -->
+ 
+ 	<div id="wrapper">
 
 		<div id="quest">
 
 			<div id="questTop"></div>
-			
-            <div id="map-canvas"></div>
-            
-            <div id="questBottom">
-
-                 <p id="questMessage">
-                    <h3>I've arrived at:</h3>
+			 <div id="map-canvas"></div>
+           
+                     
+                     <!-- 
+                        <h3>I've arrived at:</h3>
                     <form id="locTest">
                         <input type="radio" name="loc" value="library" checked> Library 
                         <input type="radio" name="loc" value="clough"> Clough
@@ -54,18 +53,18 @@
                         <input type="button" value="Watch Location" onclick="geolocWatch()" id="watchBtn">
 
                     </form>
-                </p>
 
-                <p id="questMessage">
-                    <img src="img/quest.png"/>
-                    <h3>Question Jennifer Rivers</h3>
-                    <p>Detective Boomer asked that I question Jennifer Rivers, ex-girlfriend of the late Mr. Tibbs. She was last seen walking toward the <b>library</b>.</p>
-                </p>
+-->
+
+                <div id="questBottom">
+                <img src="img/quest.png"/>
+                 <h3 id="questTitle">Quest title goes here</h3>
+				<p id="questMessage">Quest goes here</p>
+				<div id="btn"> </div>
+ 				</div>
 
                
-
-				<div id="btn"></div>
-			</div>
+ 
 		
         </div>
 	</div>

@@ -15,11 +15,16 @@ var questMaster;
 var currquests;
 var currquest;
 
+var imageURL;
+ 
+
 function initInterface() {
 	current_page = -1;
 	status_num = 0;
 	questMaster = new questGenerator(tool,killer,crimescene);
-	timeline = start;
+	timeline = 'start';
+	// console.log(timeline);
+	
 	$('#btn').append('<button class="next" id="next">Next</button>');
 	$('.next').click(function() {
 		moveNext();
@@ -27,9 +32,14 @@ function initInterface() {
 		console.log("done");
 	});
 	currquests=new Array();
+	 $('#map-canvas').hide();
+	
 }
 
+ 
+
 function moveNext() {
+
 	if (timeline=="start" || timeline=="quest-found"){
 		if (timeline=="quest-found"){
 			questMaster.finshQuest(currquest);
@@ -52,7 +62,7 @@ function moveNext() {
 	// console.log(scene_types[current_page]);
 	//  console.log(tool);
 	$('#btn').empty();
-	$('#map-canvas').hide();
+    $('#map-canvas').hide();
 
 	//$('#scene_no').text(pages[current_page]);
 	//The user should not press back button. It will mess up all the status check 
@@ -62,7 +72,7 @@ function moveNext() {
 		$('.next').click(function() {
 			moveNext();
 			recordselection('None');
-			console.log("done");
+			//console.log("done");
 		});
 	} else if (scene_types[timeline] == 'selection') {
 		$('#btn').append('<button class="selection" id="object"> Object</button>');
@@ -94,13 +104,16 @@ function recordselection(selection) {
 	switch (timeline) {
 		case "start":
 			$('#questTop').append("<center><img src='img/banner.jpg'> </img> </center>  <center><img src='img/background-auditorium.jpg'> </img> <img src='img/character-tibbs.png' style='position:relative; top:-160px; width:110px; margin-bottom:-110px;'  ></img></center>  ");
+			$('#questTitle').text("What happened?");
+	
 			$('#questMessage').text("Steven Tibbs, CEO and billionaire philanthropist, disappears when giving a speech in Ferst Center for the Arts. Let's go there to see what happens! ");
 			$('#next').text("Find out more!");
 			break;
 
 		case "choosequest":
 			$('#questTop').empty();
-			$('#questTop').append("<center><img src='img/bullet.jpg' id='item'></img></center>");
+			$('#questTop').append(imageURL);
+			$('#questTitle').text("Choose your nest quest");
 			$('#questMessage').text(deathInfo+"What would you do next?");
 			$('#object').text(currquests[0].name);
 			$('#record').text(currquests[1].name);
@@ -112,20 +125,23 @@ function recordselection(selection) {
 		case "quest-map":
 			$('#questTop').empty();
 			$('#map-canvas').show();
+			 $('#questTitle').text(currquest.name);
 			$('#questMessage').text("You have to go to "+currquest.destination+" to "+currquest.name+". Click button when you arrive. ");
 			$('#next').text("I have arrived");
 			break;
 
 		case "quest-found":
 			$('#questTop').empty();
-			$('#questTop').append("<center><img src='img/gun.jpg' id='item'></img></center>");
+			$('#questTop').append(imageURL);
+			 $('#questTitle').text(currquest.name);
 			$('#questMessage').text("You have found the "+currquest.award+".");
 			$('#next').text("Find where to go");
 			break;
 
 		case "final":
 			$('#questTop').empty();
-			$('#questTop').append("<center><img src='img/character-tibbs.jpg' id='item'></img></center>");
+			 $('#questTitle').text("Completed!");
+			$('#questTop').append("<center><img src='img/banner.jpg'></img></center>");
 			$('#questMessage').text("You have finished your task! you found the suspect. Congratulations! The suspect is "+killer+" and used "+tool+" for the affair. ");
 			break;
 

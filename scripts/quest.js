@@ -25,15 +25,24 @@ function questGenerator(tool, killer, crimescene) {
     	case "gun":
     		this.allEvidences.push("Evidence: bullet");
     		this.allEvidences.push("Evidence: gun");
+    		this.allEvidences.push("Evidence: Fingerprints on the gun");
     		this.allEvidences.push("Evidence: Tibb mentioned in his talk to thank his family");
     		this.allEvidences.push("Evidence: information about gun dealer");
     		this.allEvidences.push("Evidence: Tibb's password and email");
+    	    imageURL="<center><img src='img/gun.jpg' id='item'></img></center>";
+    	    deathInfo="Tibb is shot by a gun but his body disappeared. Many people heard the trigger, bullet is found, Gun dealer is nearby, Tibb mentioned his family during his talk. "; 
+    	
+    	
     		break;
     	case "poison":
     		this.allEvidences.push("Evidence: broken wine glass");
     		this.allEvidences.push("Evidence: the note about the poison");
     		this.allEvidences.push("Evidence: Tibb mentioned in his talk to thank his family");
     		this.allEvidences.push("Evidence: the location of Tibb's diary");
+    		 imageURL="<center><img src='img/items-poison.jpg' id='item'></img></center>";
+    	    deathInfo="Tibb drank wine and got fainted dropping the wine glass. There is a note on the scene. Witnesses are saying that Tibb had a secret which might be written in his diary. "; 
+    	
+    		
     		break;
     	case "bat":
     	
@@ -64,6 +73,16 @@ function questGenerator(tool, killer, crimescene) {
     
     switch (this.tool){
     	case "gun":
+    	
+    	this.allQuests.push(new quest("object","find the gun",ll.library, 'no', 'got gun as an evidence'));
+    	this.allQuests.push(new quest("object-investigate","investigate the fingerprints on the gun",ll.clough, 'yes', 'got fingerprints as evidence'));
+    	
+		this.allQuests.push(new quest("record","meet with detectives",ll.fountain, 'no', 'meet detectives to get information about the gun dealers'));
+    	this.allQuests.push(new quest("record-investigate","investigate gun dealer records",ll.library, 'yes', 'got gun dealer record as an evidence'));
+    	
+    	this.allQuests.push(new quest("personal","find the diary",ll.library, 'no', 'meet with Tibbs family to ask for his diary'));
+    	this.allQuests.push(new quest("personal-investigate","Go to Tibbs home to pick up and investigate the diary",ll.library, 'no', 'Diary writes about the suspect as an enemy'));
+    	
     	
     		break;
     	case "poison":
