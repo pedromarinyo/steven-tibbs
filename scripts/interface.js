@@ -1,16 +1,51 @@
-var pages = ['start', 'choosequest1', 'quest1clue-map', 'quest1clue-found', 'quest2clue-map', 'quest2clue-found', 'quest3clue-map', 'quest3clue-found', 'quest4clue-map', 'quest4clue-found', 'final'];
-var scene_types = ['next', 'selection', 'next', 'next', 'next', 'next', 'next', 'next', 'next', 'next', 'next']
+var pages = ['start', 'choosequest', 'quest-map', 'quest-found', 'final'];
+var scene_types = {};
+scene_types['start']='next';
+scene_types['choosequest']='selection';
+scene_types['quest-map']='next';
+scene_types['quest-found']='next';
+scene_types['final']='next';
 
-var current_page = -1;
-var status_num = 0;
+var current_page;
+var status_num;
 var timeline;
 var tool = "gun";
 var questtask;
+var questMaster;
+var currquests;
+var currquest;
 
+function initInterface() {
+	current_page = -1;
+	status_num = 0;
+	questMaster = new questGenerator(tool,killer,crimescene);
+	timeline = start;
+	$('#btn').append('<button class="next" id="next">Next</button>');
+	$('.next').click(function() {
+		moveNext();
+		recordselection('None');
+		console.log("done");
+	});
+	currquests=new Array();
+}
 
 function moveNext() {
-	current_page++;
-	timeline = pages[current_page];
+	if (timeline=="start" || timeline=="quest-found"){
+		if (timeline=="quest-found"){
+			questMaster.finshQuest(currquest);
+		}
+		currquests=questMaster.nextQuests();
+		if (currquests.length>1) timeline="choosequest";
+		else if (currquests.length==1) timeline="quest-map";
+		else timeline="final";
+	}
+	else if (timeline=='choosequest'){
+		timeline='quest-map';
+	}
+	else if (timeline=='quest-map'){
+		timeline='quest-found';
+	}
+	//timeline = pages[current_page];
 	// console.log(current_page);
 	// console.log("////");
 	// console.log(timeline);
@@ -22,17 +57,17 @@ function moveNext() {
 	//$('#scene_no').text(pages[current_page]);
 	//The user should not press back button. It will mess up all the status check 
 
-	if (scene_types[current_page] == 'next') {
+	if (scene_types[timeline] == 'next') {
 		$('#btn').append('<button class="next" id="next">Next</button>');
 		$('.next').click(function() {
 			moveNext();
 			recordselection('None');
 			console.log("done");
 		});
-	} else if (scene_types[current_page] == 'selection') {
+	} else if (scene_types[timeline] == 'selection') {
 		$('#btn').append('<button class="selection" id="object"> Object</button>');
 		$('#btn').append('<button class="selection" id="record"> Record</button>');
-		//$('#btn').append('<button class="selection" id="Personal"> Personal</button>');
+		$('#btn').append('<button class="selection" id="Personal"> Personal</button>');
 		$('.selection').click(function() {
 			moveNext();
 			recordselection($(this).attr('id'));
@@ -47,6 +82,13 @@ function moveNext() {
 function recordselection(selection) {
 	//console.log("starting");
 	questtask = selection;
+	if (selection=='record'){
+		currquest=currquests[1];
+	}
+	else if (selection=='Personal'){
+		currquest=currquests[2];
+	}
+	else currquest=currquests[0];
 	//console.log(questtask);
 
 	switch (timeline) {
@@ -56,96 +98,35 @@ function recordselection(selection) {
 			$('#next').text("Find out more!");
 			break;
 
-		case "choosequest1":
+		case "choosequest":
 			$('#questTop').empty();
 			$('#questTop').append("<center><img src='img/bullet.jpg' id='item'></img></center>");
-			//$('#questMessage').text("Tibbs is shot by a gun. A bullet is found. Maybe finding the gun would help investigating. Detectives say that the suspect might have bought the gun from the nearby gun store. The crowd are mourning, and some are questioning whether Tibb's had an issue with his family, based on his talk. What would you do next? ");
 			$('#questMessage').text(deathInfo+"What would you do next?");
-			// $('#object').text("Find the Gun");
-// 			$('#record').text("Meet Detective");
-// 			$('#personal').text("Meet with Families");
-			$('#object').text(quest1.name);
-			$('#record').text(quest3.name);
-			//$('#personal').text(quest3.name);
+			$('#object').text(currquests[0].name);
+			$('#record').text(currquests[1].name);
+			if (currquests.length>2) $('#personal').text(currquests[2].name);
+			else $('#personal').hide();
 			break;
 
 
-		case "quest1clue-map":
+		case "quest-map":
 			$('#questTop').empty();
 			$('#map-canvas').show();
-			$('#questMessage').text("You have to go to "+quest1.destination+" to "+quest1.name+". Click button when you arrive. ");
+			$('#questMessage').text("You have to go to "+currquest.destination+" to "+currquest.name+". Click button when you arrive. ");
 			$('#next').text("I have arrived");
 			break;
 
-		case "quest1clue-found":
+		case "quest-found":
 			$('#questTop').empty();
 			$('#questTop').append("<center><img src='img/gun.jpg' id='item'></img></center>");
-			$('#questMessage').text("You have found the "+quest1.award+".");
+			$('#questMessage').text("You have found the "+currquest.award+".");
 			$('#next').text("Find where to go");
 			break;
-
-		case "quest2clue-map":
-			$('#questTop').empty();
-			$('#map-canvas').show();
-			$('#questMessage').text("You have to go to "+quest2.destination+" to "+quest2.name+". Click button when you arrive. ");
-			$('#next').text("I have arrived");
-			break;
-
-
-		case "quest2clue-found":
-			$('#questTop').empty();
-			$('#questTop').append("<center><img src='img/gun.jpg' id='item'></img></center>");
-			$('#questMessage').text("You have found the "+quest2.award+".");
-			$('#next').text("Next");
-			break;
-
-// 		case "choosequest3":
-// 			$('#questTop').empty();
-// 			$('#questTop').append("<center><img src='img/gun.jpg' id='item'></img></center>");
-// 			$('#questMessage').text(" You need more clues. You can meet with detectives or families. ");
-// 
-// 			$('#object').hide();
-// 			$('#record').text(quest2.name);
-// 			$('#personal').text(quest3.name);
-// 			break;
-
-		case "quest3clue-map":
-			$('#questTop').empty();
-			$('#map-canvas').show();
-			$('#questMessage').text("You have to go to "+quest3.destination+" to "+quest3.name+". Click button when you arrive. ");
-			$('#next').text("I have arrived ");
-			break;
-
-		case "quest3clue-found":
-			$('#questTop').empty();
-			$('#questTop').append("<center><img src='img/character-boomer.jpg' id='item'></img></center>");
-			//$('#questMessage').text("        	Detective boomer says that the gun might be purchased from the nearby dealershop. He asks if you can go with him to the dealershop to see who purchased the gun recently. ");
-			$('#questMessage').text("You have found the "+quest3.award+".");
-			$('#next').text(quest4.name);
-			break;
-
-		case "quest4clue-map":
-			$('#questTop').empty();
-			$('#map-canvas').show();
-			$('#questMessage').text("You have to go to "+quest4.destination+" to "+quest4.name+". Click button when you arrive. ");
-			$('#next').text("I have arrived ");
-			break;
-
-		case "quest4clue-found":
-			$('#questTop').empty();
-			$('#questTop').append("<center><img src='img/character-boomer.jpg' id='item'></img></center>");
-
-			//$('#questMessage').text("You have found that xxxx visited the dealership before. ");
-			$('#questMessage').text("You have found the "+quest4.award+".");
-			$('#next').text(" Next ");
-			break;
-
 
 		case "final":
 			$('#questTop').empty();
 			$('#questTop').append("<center><img src='img/character-tibbs.jpg' id='item'></img></center>");
 			$('#questMessage').text("You have finished your task! you found the suspect. Congratulations! The suspect is "+killer+" and used "+tool+" for the affair. ");
-			//	 $('#questBottom button').remove();
 			break;
 
 
