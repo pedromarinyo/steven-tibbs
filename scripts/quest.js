@@ -87,7 +87,7 @@ function questGenerator(tool, killer, crimescene) {
     		this.allEvidences.push("Evidence: DNA test of personal belongings left in the scene ");
    			this.allEvidences.push("Evidence: CCTV of the bldg ");
     		this.allEvidences.push("Evidence: Tibb's friends witnesses that he had a  fans who was a psychopass and hated him. ");
-    		this.allEvidences.push("Evidence: Threatening Voicemail sent to Tibbs ");
+    		this.allEvidences.push("Evidence: Threatening textmessage sent to Tibbs ");
          
             imageURL="<center><img src='img/items-injection.png' id='item'></img></center>";
     	    deathInfo="You heard a scream. Tibb seems to be choked by a rope but his body disappeared, and only the rope is left. Tibb paused for his talk for a few seconds, being scared to see an unexpected audience. Security says that only mailman has access to the back of the bldg.  "; 
@@ -161,21 +161,21 @@ function questGenerator(tool, killer, crimescene) {
 		this.allQuests.push(new quest("record","meet with nurses",ll.healthCenter, 'no', 'got suspicious hospital record'));
     	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, 'yes', 'got cctv record of the suspect with suspicious activity'));
     	
-    	this.allQuests.push(new quest("personal","find the enemy",ll.library, 'no', 'meet with Tibbs officemates to know tibb enemy who is a psychopass'));
-    	this.allQuests.push(new quest("personal-investigate","Go to Tibbs desk to find any data ",ll.vanLeer, 'no', 'Suspect left a threatening letter on Tibb desk  '));
+    	this.allQuests.push(new quest("personal","find tibbs secret",ll.library, 'no', 'meet with Tibbs family to find out his secret about drug usage '));
+    	this.allQuests.push(new quest("personal-investigate","Listen to Tibbs voicemail ",ll.vanLeer, 'no', 'Suspect left a threatening voice mail  '));
 
-    		break;
+        break;
     		
     		
     	case "rope":
-    	this.allQuests.push(new quest("object","find the bat",ll.ferst, 'no', 'got a broken bat'));
-    	this.allQuests.push(new quest("object-investigate","investigate the DNA of hair on the bat",ll.clough, 'yes', 'got DNA as evidence'));
+    	this.allQuests.push(new quest("object","find the rope",ll.ferst, 'no', 'found rope and personal belongings'));
+    	this.allQuests.push(new quest("object-investigate","investigate the DNA of hair from the belongings",ll.clough, 'yes', 'got DNA as evidence'));
     	
-		this.allQuests.push(new quest("record","meet with captain",ll.studentCenter, 'no', 'got stolen record of the bat'));
-    	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, 'yes', 'got cctv record of the suspect stealing a bat'));
+		this.allQuests.push(new quest("record","meet with security",ll.studentCenter, 'no', 'got witnesses about mailman visits'));
+    	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, 'yes', 'got cctv record of the bldg and a fake mailman'));
     	
-    	this.allQuests.push(new quest("personal","find the enemy",ll.library, 'no', 'meet with Tibbs officemates to know tibb enemy who is a psychopass'));
-    	this.allQuests.push(new quest("personal-investigate","Go to Tibbs desk to find any data ",ll.vanLeer, 'no', 'Suspect left a threatening letter on Tibb desk  '));
+    	this.allQuests.push(new quest("personal","find the enemy",ll.library, 'no', 'meet with Tibbs friends to know tibbs fan who is a psychopass'));
+    	this.allQuests.push(new quest("personal-investigate","Go to Tibbs desk to find data from phone ",ll.vanLeer, 'no', 'Suspect left a threatening text message '));
     	
     	break;
     	
