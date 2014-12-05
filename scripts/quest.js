@@ -23,6 +23,11 @@ function questGenerator(tool, killer, crimescene) {
     // Generate all possible evidences
     switch (this.tool){
     	case "gun":
+    		
+    		this.allEvidences.push("Evidence: have gun to investigate");
+ this.allEvidences.push("Evidence:Got  Tibbs password and email from Tibbs family");
+  this.allEvidences.push("Evidence: Gun dealer records");
+
     		this.allEvidences.push("Evidence: Bullet is left in the scene");
     		this.allEvidences.push("Evidence: Tibb had a grim when he mentioned in his talk to thank his family");
     		this.allEvidences.push("Evidence: Gun dealer is nearby. ");
@@ -38,6 +43,8 @@ function questGenerator(tool, killer, crimescene) {
     	
     		break;
     	case "poison":
+    		this.allEvidences.push("Evidence: Got library check out record as an evidence");
+    		
     		this.allEvidences.push("Evidence: broken wine glass");
     		this.allEvidences.push("Evidence: the note about the poison");
     	    this.allEvidences.push("Evidence: Tibb mentioned in his talk to thank his friends with a grim");
@@ -53,6 +60,12 @@ function questGenerator(tool, killer, crimescene) {
     		
     		break;
     	case "bat":
+    		
+    		this.allEvidences.push("Evidence: Stolen record of the bat");
+  this.allEvidences.push("Evidence: cctv record of the suspect stealing a bat");
+  this.allEvidences.push("Evidence: threatening letter on Tibb desk");
+
+
     	    this.allEvidences.push("Evidence: broken bat and drops of blood");
     		this.allEvidences.push("Evidence: Witness about the missing bat");
     	    this.allEvidences.push("Evidence: Tibb mentioned in his talk to thank his office mates then got frozen");
