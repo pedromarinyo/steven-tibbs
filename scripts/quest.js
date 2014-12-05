@@ -194,7 +194,7 @@ function questGenerator(tool, killer, crimescene) {
     		if (this.questAccomplished.indexOf(this.allQuests[i]) == -1) {
     			var hasEvidenceRequired = true;
     			for (var j = 0; j < this.allQuests[i].evidenceRequired.length; j++) {
-    				if (this.evidenceAccomplished.indexOf(this.allQuests[i].evidenceRequired[j]) == -1) {
+    				if (this.evidenceAccomplished.indexOf(this.allQuests[i].evidenceRequired[j]) == -1 && this.allQuests[i].evidenceRequired[j]!='none') {
     					hasEvidenceRequired = false;
     				}
     			}
