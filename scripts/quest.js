@@ -58,9 +58,9 @@ function questGenerator(tool, killer, crimescene) {
     	    this.allEvidences.push("Evidence: Tibb mentioned in his talk to thank his office mates then got frozen");
     				
     		this.allEvidences.push("Evidence: DNA test of left hair and bloods. ");
-   			 this.allEvidences.push("Evidence: Stolen record of the bat and CCTV  ");
+   			 this.allEvidences.push("Evidence: Stolen record of the bat and CCTV");
     		this.allEvidences.push("Evidence: Tibb's office mate says that he had an enemy");
-    		this.allEvidences.push("Evidence:  A message is left on Tibb's desk.  ");
+    		this.allEvidences.push("Evidence:  A message is left on Tibbs desk");
             imageURL="<center><img src='img/items-bat.jpg' id='item'></img></center>";
     	    deathInfo="There was a sound of a punch. Tibb seems to be hit by a baseball bat. The bat is broken, there are drops of blood around but Tibbs is missing. Tibb mentioned in his talk to thank his office mates and was frozen for a while. "; 
        	
@@ -73,7 +73,7 @@ function questGenerator(tool, killer, crimescene) {
     		this.allEvidences.push("Evidence: DNA test of left hair from the clothes in the scene");
    			 this.allEvidences.push("Evidence: Hospital record with suspicious activities");
     		this.allEvidences.push("Evidence: CCTV of the hospital");
-    		this.allEvidences.push("Evidence: Tibb's family's witnesses about Tibb's drug usage");
+    		this.allEvidences.push("Evidence: Tibb's familys witnesses about Tibbs drug usage");
     		this.allEvidences.push("Evidence:  Voicemail sent to Tibbs from  a drug dealer /nurse");
             imageURL="<center><img src='img/items-injection.png' id='item'></img></center>";
     	    deathInfo="Tibbs seems to be injected but his body disappeared and there is a syringe. He mentioned in his talk that he has a secret for his happiness that his family knows. "; 
