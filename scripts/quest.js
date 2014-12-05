@@ -25,8 +25,8 @@ function questGenerator(tool, killer, crimescene) {
     	case "gun":
     		
     		this.allEvidences.push("Evidence: have gun to investigate");
- this.allEvidences.push("Evidence:Got  Tibbs password and email from Tibbs family");
-  this.allEvidences.push("Evidence: Gun dealer records");
+ 			this.allEvidences.push("Evidence:Got  Tibbs password and email from Tibbs family");
+  			this.allEvidences.push("Evidence: Gun dealer records");
 
     		this.allEvidences.push("Evidence: Bullet is left in the scene");
     		this.allEvidences.push("Evidence: Tibb had a grim when he mentioned in his talk to thank his family");
@@ -62,8 +62,8 @@ function questGenerator(tool, killer, crimescene) {
     	case "bat":
     		
     		this.allEvidences.push("Evidence: Stolen record of the bat");
-  this.allEvidences.push("Evidence: cctv record of the suspect stealing a bat");
-  this.allEvidences.push("Evidence: threatening letter on Tibb desk");
+  			this.allEvidences.push("Evidence: cctv record of the suspect stealing a bat");
+  			this.allEvidences.push("Evidence: threatening letter on Tibb desk");
 
 
     	    this.allEvidences.push("Evidence: broken bat and drops of blood");
@@ -71,7 +71,7 @@ function questGenerator(tool, killer, crimescene) {
     	    this.allEvidences.push("Evidence: Tibb mentioned in his talk to thank his office mates then got frozen");
     				
     		this.allEvidences.push("Evidence: DNA test of left hair and bloods. ");
-   			 this.allEvidences.push("Evidence: Stolen record of the bat and CCTV");
+   			this.allEvidences.push("Evidence: Stolen record of the bat and CCTV");
     		this.allEvidences.push("Evidence: Tibb's office mate says that he had an enemy");
     		this.allEvidences.push("Evidence:  A message is left on Tibbs desk");
             imageURL="<center><img src='img/items-bat.jpg' id='item'></img></center>";
@@ -132,10 +132,10 @@ function questGenerator(tool, killer, crimescene) {
     	case "gun":
     	
     	this.allQuests.push(new quest("object","find the gun",ll.ferst, 'none', 'Evidence: have gun to investigate'));
-    	this.allQuests.push(new quest("object-investigate","investigate the fingerprints on the gun",ll.clough, 'yes', "Evidence: Fingerprints on the gun"));
+    	this.allQuests.push(new quest("object-investigate","investigate the fingerprints on the gun",ll.clough, 'Evidence: have gun to investigate', "Evidence: Fingerprints on the gun"));
     	
 		this.allQuests.push(new quest("record","meet with detectives",ll.fountain, 'none', "Evidence: Information about gun dealer"));
-    	this.allQuests.push(new quest("record-investigate","investigate gun dealer records",ll.skiles, 'yes', 'Evidence: Gun dealer records'));
+    	this.allQuests.push(new quest("record-investigate","investigate gun dealer records",ll.skiles, "Evidence: Information about gun dealer", 'Evidence: Gun dealer records'));
     	
     	this.allQuests.push(new quest("personal","find the password",ll.library, 'none', 'Evidence:Got  Tibbs password and email from Tibbs family'));
     	this.allQuests.push(new quest("personal-investigate","Go to computerlab to investigate email",ll.vanLeer, 'none', "Evidence: Tibb has received a threatening email"));
@@ -145,10 +145,11 @@ function questGenerator(tool, killer, crimescene) {
     	case "poison":
     	
     	this.allQuests.push(new quest("object","find the wineglass",ll.ferst, 'none', "Evidence: broken wine glass"));
-    	this.allQuests.push(new quest("object-investigate","investigate the fingerprints on the wineglass",ll.clough, 'yes', "Evidence: Wine glass has fingerprints"));
+    	this.allQuests.push(new quest("object-investigate","investigate the fingerprints on the wineglass",ll.clough, "Evidence: broken wine glass", "Evidence: Wine glass has fingerprints"));
     	
-		this.allQuests.push(new quest("record","meet with police",ll.fountain, 'none', "Evidence: Note about the poison shows that the suspect borrowed books from the library"));
-    	this.allQuests.push(new quest("record-investigate","investigate the notes",ll.library, 'yes', 'Evidence: Got library check out record as an evidence'));
+
+		this.allQuests.push(new quest("record","meet with police",ll.fountain, 'none', "Evidence: Note about the poison shows that the suspect borrowed books from the library. "));
+    	this.allQuests.push(new quest("record-investigate","investigate the notes",ll.library, "Evidence: Note about the poison shows that the suspect borrowed books from the library. ", 'got library check out record an evidence'));
     	
     	this.allQuests.push(new quest("personal","find the diary",ll.studentCenter, 'none', "Evidence: Family knows the location of Tibbs diary"));
     	this.allQuests.push(new quest("personal-investigate","Go to Tibbs home to pick up and investigate the diary",ll.library, 'none', "Evidence:  Tibbs diary shows that he had a heart breaking experience with friends in a romantic triangle"));
@@ -158,10 +159,10 @@ function questGenerator(tool, killer, crimescene) {
     	case "bat":
     	
     	this.allQuests.push(new quest("object","find the bat",ll.ferst, 'none', 'Evidence: broken bat and drops of blood'));
-    	this.allQuests.push(new quest("object-investigate","investigate the DNA of hair on the bat",ll.clough, 'yes', 'Evidence: DNA test of left hair and bloods. '));
+    	this.allQuests.push(new quest("object-investigate","investigate the DNA of hair on the bat",ll.clough, 'Evidence: broken bat and drops of blood', 'Evidence: DNA test of left hair and bloods. '));
     	
 		this.allQuests.push(new quest("record","meet with captain",ll.studentCenter, 'none', "Evidence: Stolen record of the bat"));
-    	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, 'yes', "Evidence: cctv record of the suspect stealing a bat"));
+    	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, "Evidence: Stolen record of the bat", "Evidence: cctv record of the suspect stealing a bat"));
     	
     	this.allQuests.push(new quest("personal","find the enemy",ll.library, 'none', "Evidence: Tibbs office mate says that he had an enemy"));
     	this.allQuests.push(new quest("personal-investigate","Go to Tibbs desk to find any data ",ll.vanLeer, 'none', "Evidence: threatening letter on Tibb desk"));
@@ -170,10 +171,10 @@ function questGenerator(tool, killer, crimescene) {
   
     	case "injection":
     	this.allQuests.push(new quest("object","find the syringe",ll.ferst, 'none', 'Evidence: Syringe and clothes of the nurse left in the scene'));
-    	this.allQuests.push(new quest("object-investigate","investigate the DNA of hair on the clothes",ll.fountain, 'yes', 'Evidence: DNA test of left hair from the clothes in the scene'));
+    	this.allQuests.push(new quest("object-investigate","investigate the DNA of hair on the clothes",ll.fountain, 'Evidence: Syringe and clothes of the nurse left in the scene', 'Evidence: DNA test of left hair from the clothes in the scene'));
     	
 		this.allQuests.push(new quest("record","meet with nurses",ll.healthCenter, 'none', 'Evidence: Hospital record with suspicious activities'));
-    	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, 'yes', 'Evidence: CCTV of the hospital'));
+    	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, 'Evidence: Hospital record with suspicious activities', 'Evidence: CCTV of the hospital'));
     	
     	this.allQuests.push(new quest("personal","find tibbs secret",ll.library, 'none', 'Evidence: Tibbs familys witnesses about Tibbs drug usage'));
     	this.allQuests.push(new quest("personal-investigate","Listen to Tibbs voicemail ",ll.vanLeer, 'none', 'Evidence:  Voicemail sent to Tibbs from  a drug dealer /nurse'));
@@ -183,10 +184,10 @@ function questGenerator(tool, killer, crimescene) {
     		
     	case "rope":
     	this.allQuests.push(new quest("object","find the rope",ll.ferst, 'none', 'Evidence: found rope and personal belongings'));
-    	this.allQuests.push(new quest("object-investigate","investigate the DNA of hair from the belongings",ll.clough, 'yes', 'Evidence: DNA test of personal belongings left in the scene'));
+    	this.allQuests.push(new quest("object-investigate","investigate the DNA of hair from the belongings",ll.clough, 'Evidence: found rope and personal belongings', 'Evidence: DNA test of personal belongings left in the scene'));
     	
 		this.allQuests.push(new quest("record","meet with security",ll.studentCenter, 'none', 'Evidence: Security said only mailman has access to the back of the bldg'));
-    	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, 'yes', 'Evidence: CCTV of the bldg'));
+    	this.allQuests.push(new quest("record-investigate","investigate the cctv",ll.fountain, 'Evidence: Security said only mailman has access to the back of the bldg', 'Evidence: CCTV of the bldg'));
     	
     	this.allQuests.push(new quest("personal","find the enemy",ll.library, 'none', 'Evidence: Tibbs friends witnesses that he had a  fans who was a psychopass and hated him'));
     	this.allQuests.push(new quest("personal-investigate","Go to Tibbs desk to find data from phone ",ll.vanLeer, 'none', 'Evidence: Threatening textmessage sent to Tibbs '));
