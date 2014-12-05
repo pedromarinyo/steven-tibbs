@@ -11,11 +11,11 @@ var questtask;
 function moveNext() {
 	current_page++;
 	timeline = pages[current_page];
-	// console.log(current_page);
-	// console.log("////");
-	// console.log(timeline);
-	// console.log(scene_types[current_page]);
-	//  console.log(tool);
+	// $("#simOutput").append("<hr>" +current_page);
+	// $("#simOutput").append("<hr>" +"////");
+	// $("#simOutput").append("<hr>" +timeline);
+	// $("#simOutput").append("<hr>" +scene_types[current_page]);
+	//  $("#simOutput").append("<hr>" +tool);
 	$('#btn').empty();
 	$('#map-canvas').hide();
 
@@ -27,7 +27,7 @@ function moveNext() {
 		$('.next').click(function() {
 			moveNext();
 			recordselection('None');
-			console.log("done");
+			$("#simOutput").append("<hr>" +"done");
 		});
 	} else if (scene_types[current_page] == 'selection') {
 		$('#btn').append('<button class="selection" id="object"> Object</button>');
@@ -39,15 +39,15 @@ function moveNext() {
 		})
 	}
 
-	// console.log("fin");
+	// $("#simOutput").append("<hr>" +"fin");
 }
 
 
 
 function recordselection(selection) {
-	//console.log("starting");
+	//$("#simOutput").append("<hr>" +"starting");
 	questtask = selection;
-	//console.log(questtask);
+	//$("#simOutput").append("<hr>" +questtask);
 
 	switch (timeline) {
 		case "start":

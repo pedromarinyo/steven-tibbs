@@ -24,18 +24,18 @@ function Character(name, handle, personality, loc, has, money) {
     this.money                  = money;
 
     this.alive                  = true;
+    this.lastCharAsked; 
     this.relations;
     this.knowledge              = [];
     this.currGoal;
-    this.interruptGoal          = null; 
     this.nextAction             = null;
     this.nextActionTarget;
-    this.interruptAction        = null; 
-    this.interruptActionTarget;
 
     this.actionTimer;
-    this.goalsAccomplished = new Array();
-    this.goalsTried = new Array();
+    this.goalsAccomplished = [];
+    this.goalsTried = [];
+    this.actionsTried = [];
+    this.targetsTried= [];
 
     //Checks, getters and setters
     //Retrieves personality attribute;
@@ -50,12 +50,19 @@ function Character(name, handle, personality, loc, has, money) {
 
     //Retrieves relationship parameter for a given target character;
     this.getRelation = function getRelation(targetChar, attribute) {
-        var i = 0;
-        while (i < this.relations.length) {
-            if(this.relations[i].targetChar == targetChar) {return this.relations[i].attribute;}
-            i++;
+        for (character in this.relations) {
+            if (character == targetChar) { return this.relations[targetChar][attribute]; }
         }
-        return null;
+    }
+
+    //Set relation attr for given target character.
+    this.setRelationAttr = function setRelationAttr(targetChar, attr, value) {
+        
+        for (character in this.relations) {
+            if (character == targetChar) {
+                this.relations[targetChar][attr] = value;
+            }
+        }
     }
 
     //Set character's relations
@@ -89,6 +96,17 @@ function Character(name, handle, personality, loc, has, money) {
         return false;
     }
 
+    //Get location of item based on character knowledge.
+    this.knowledgeItemLoc = function knowledgeItemLoc(item) {
+        //Scan knowledge for mention of item
+        for(i = 0; i < this.knowledge.length; i++) {
+            if (this.knowledge[i].predicateType == "loc" && this.knowledge[i].targetSubject == item) {
+                return this.knowledge[i].value;
+            }
+        }
+        return null;
+    }
+
     //Inventory management
     //Remove item from character's inventory
     this.removeItem = function removeItem(item) {
@@ -99,9 +117,10 @@ function Character(name, handle, personality, loc, has, money) {
     //Add item into character's inventory
     this.addItem = function addItem(item) {
         this.has.push(item);
+        item.owner = this;
     }
 
-    //Check if this character shares the same location as another character
+    //Check if this character shares the same location as another character or item. 
     this.checkProx = function checkProx(character) {
         if (this.loc == character.loc) {return true;}
         else {return false;}
@@ -115,7 +134,7 @@ function Character(name, handle, personality, loc, has, money) {
                 this.knowledge[i].targetSubject == target && 
                 this.knowledge[i].predicateType == attr
             ) {
-                return true;
+                return this.knowledge[i].value;
             } 
         }
         return false;  
@@ -125,46 +144,130 @@ function Character(name, handle, personality, loc, has, money) {
     //Setting new current goal
     this.setCurrGoal = function setCurrGoal(goalName) {
         this.currGoal = gl[goalName];
-        console.log(this.name +" wants to "+ this.currGoal.name);
+        //$("#simOutput").append("<hr>" +this.name +" wants to "+ this.currGoal.name);
     }
 
     this.setNextAction = function setNextAction(action, targetChar) {
         this.nextAction = action;
         this.nextActionTarget = targetChar;
         this.actionTimer = action.duration();
-        console.log(this.name +" decides to "+ this.nextAction.name + ".");
+        $("#simOutput").append("<hr>" +this.name +" decides to "+ this.nextAction.name);
     }
 
     this.performAction = function performAction() {
         this.nextAction.setUser(this);
         this.nextAction.setTarget(this.nextActionTarget);
 
-        this.nextAction.effects(); //Perform action
-        this.goalsAccomplished.push(this.currGoal); //Remember that the character completed this goal.
+        var result = this.nextAction.effects(); //Perform action; check if it was sucessful. 
+        this.actionsTried.push(this.nextAction);
+        this.targetsTried.push(this.nextActionTarget);
+        
+        switch (result) {
+            case true:
+                //Remember that the character completed this goal.
+                this.goalsAccomplished.push(this.currGoal); 
+                
+                //Remove action and actionTarget from actionsTried/targetsTried.
+                for(i = this.actionsTried.length - 1; i > 0; i--) {
+                    if (this.actionsTried[i] == this.nextAction && this.targetsTried[i] == this.nextActionTarget) {
+                        this.actionsTried.splice(i, 1);
+                        this.targetsTried.splice(i, 1);
+                    }
+                }
+                
+                //If goal has parent, make the current goal's parent the new goal.
+                if (!!this.currGoal.parent) {
+                    this.setCurrGoal(this.currGoal.parent);
+                }
+                else {
+                    this.setCurrGoal("wait");
+                }
+                break;
+            case "learnFail": //If action "learnAboutX" isn't successful, try another method of learning.
+                //Add to actionsTried along with target; try action again with new targets;  
+                //If no score > 0 actions exist, plan accordingly in planning function. 
+                this.setCurrGoal(this.currGoal.child[0]);
+                //Remove "learnAboutX" from accomplished goals. 
+                var i = this.goalsAccomplished.indexOf(gl[this.currGoal.child[0]]);
+                this.goalsAccomplished.splice(i, 1);
+
+                //(include in planning code)Goto parent; if parent's children are "or", go to next available child. 
+                //Otherwise, go to parent and repeat.
+                break;
+        }
         
         //Remove action from nextAction 
         this.nextAction = null; this.nextActionTarget = null; this.actionTimer = 0;
-
-        //If goal has parent, make the current goal's parent the new goal.
-        if (!!this.currGoal.parent) {
-            var currGoalParent = this.currGoal.parent;
-            this.setCurrGoal(currGoalParent);
-        }
-        else if (this.currGoal.name != "wait") {this.setCurrGoal("wait");}
     }
 
     //Planing and Heuristics
     //______________________________
     //Plan for next action
-    this.plan = function plan() {
+    this.plan = function plan() { 
+        //Function Description
+        /* 
+            1. If currGoal's children haven't been accomplished, decompose and re-plan;
+            2. Find legal actions based on current world state and action preconditions; 
+            3. Score actions -- compare goal's desired effects and action effects. 
+            4. If no available actions, pop to parent goal and re-plan.
+        */
         
-        //Check if goal has any child nodes, check that they're are accomplished. If not, make child current goal.
+        //Check if goal has any child nodes, check that they're are accomplished. If not, make child current goal then re-plan.
         if (this.currGoal.child.length > 0 && this.currGoal.childLogic == "and") {
-            for (i = 0; i < this.currGoal.child.length; i++ ) {
-                if (this.goalsAccomplished.indexOf(gl[this.currGoal.child[i]]) == -1) {
-                    this.setCurrGoal(this.currGoal.child[i]);
-                    return "fail";
+
+            //Check if a child has been tried and failed; if so, pop to parent goal. 
+            for (i = 0; i < this.currGoal.child.length; i++) {
+                if (this.goalsTried.indexOf(gl[this.currGoal.child[i]]) != -1) {
+                    this.goalsTried.push(this.currGoal); 
+                    //If parent node exists, set goal to parent; else, wait. 
+                    if(!!this.currGoal.parent) {this.setCurrGoal(this.currGoal.parent); this.plan(); return;}
+                    else {this.setCurrGoal("wait"); return;}
                 }
+            }
+            
+            //If not, choose a goal that has yet to be accomplished. 
+            for (i = 0; i < this.currGoal.child.length; i++ ) {
+                if ( this.goalsAccomplished.indexOf(gl[this.currGoal.child[i]]) == -1) { //If goal hasn't been accomplished.
+                    this.setCurrGoal(this.currGoal.child[i]);
+                    this.plan();
+                    return; 
+                }
+            }
+         } 
+         //Else, if logic is "or", and no children have been accomplished, choose a child that has yet to be tried. 
+         else if (this.currGoal.child.length > 0 && this.currGoal.childLogic == "or") {
+            //Check if at least one child has been accomplished; score goals based on personality vectors.
+            var score = [];
+            var orGoalAccomplished = false;
+            for (var i = 0; i < this.currGoal.child.length; i++) { 
+                if (this.goalsAccomplished.indexOf(gl[this.currGoal.child[i]]) != -1 ) { 
+                    orGoalAccomplished = true; 
+                }
+                else {score[i] = (!!gl[this.currGoal.child[i]].personality) ? this.getPersonality(gl[this.currGoal.child[i]].personality) : 0;}    
+            }
+            
+            //If no one goal has been accomplished, choose best child that hasn't been tried.
+            if (!orGoalAccomplished) { 
+
+                var goals = []; //Goals userChar has yet to try. 
+                for (i = 0; i < this.currGoal.child.length; i++) {
+                    if (this.goalsTried.indexOf(gl[this.currGoal.child[i]]) == -1) {
+                        goals.push(this.currGoal.child[i]);
+                    }
+                }
+
+                if (goals.length > 0) {
+                    var bestGoalIndex = goals.length - 1;
+                    for (i = bestGoalIndex; i >= 0; i-- ) {
+                       if (score[i] > score[bestGoalIndex]) {
+                          bestGoalIndex = i; 
+                        }
+                    } 
+
+                    this.setCurrGoal(goals[bestGoalIndex]); 
+                    this.plan(); 
+                    return;
+                }                      
             }
          }
 
@@ -172,15 +275,16 @@ function Character(name, handle, personality, loc, has, money) {
         var desiredEffects = this.currGoal.desiredEffects; 
         
         //Create an array of legal actions and targets.
-        var legalActions = new Array();
-        var legalTargets = new Array();
-        var legalActionScore = new Array();
+        var legalActions = [];
+        var legalTargets = [];
+        var legalActionScore = [];
 
-        //Check for legal actions (w/ legal targets)
+        //Check for legal actions (w/ chars targets)
         for  (var cName in cl) { //Character targets
             for (var aName in al) {
                 
-                if (aName != "getItem" && aName != "moveToItemLoc") {
+                if (aName != "getItem" && aName != "moveToItemLoc" && aName != "buyItemFromBlackmarket") {
+                    
                     al[aName].setUser(this); //Set user character.
                     al[aName].setTarget(cl[cName]); //Set target character.
                  
@@ -192,10 +296,10 @@ function Character(name, handle, personality, loc, has, money) {
                 }
             } 
         }
-
-        for (var iName in il) { //Item targets
+        //Check for legal actions (w/ items targets)
+        for (var iName in il) {
             for (var aName in al) {
-                if (aName == "getItem" || aName == "moveToItemLoc" || aName == "askAboutCharItem") {
+                if (aName == "getItem" || aName == "moveToItemLoc" || aName == "askAboutCharItem" || aName == "buyItemFromBlackmarket") {
                     al[aName].setUser(this);
                     al[aName].setTarget(il[iName]);
 
@@ -210,8 +314,10 @@ function Character(name, handle, personality, loc, has, money) {
 
         //Scan legal actions for best fit with currGoal's desired effects.
         for (i = 0; i < legalActions.length; i++) { //For each legal action...
-            
+            //$("#simOutput").append("<hr>" +legalActions[i].name + " : " + legalTargets[i].name);
+
             var score = 0;
+            
             for (j = 0; j < desiredEffects.length; j++) { //Compare currGoal's desired effects and action's effects.
                 for (k = 0; k < legalActions[i].effectsDesc.length; k++) {
                     
@@ -230,11 +336,16 @@ function Character(name, handle, personality, loc, has, money) {
                     if(desiredEffects[j].character == "userChar") {goalCharacter = this;}
                     else if (desiredEffects[j].character== "targetChar") {goalCharacter = legalTargets[i];}
                     else {goalCharacter = desiredEffects[j].character;}
-
                     //Determining goal value.
                     if(desiredEffects[j].value == "userChar") {goalValue = this;}
                     else if (desiredEffects[j].value == "targetChar") {goalValue = legalTargets[i];}
                     else {goalValue = desiredEffects[j].value;}
+
+                    //$("#simOutput").append("<hr>" +goalCharacter);
+                    //if (!!goalCharacter) {$("#simOutput").append("<hr>" +goalCharacter.name + " : " + effectCharacter.name);}
+                    //$("#simOutput").append("<hr>" +desiredEffects[j].attr + " : " + legalActions[i].effectsDesc[k].attr);
+                    //$("#simOutput").append("<hr>" +goalValue.name + " : " + effectValue.name);
+
                     
                     if ( 
                         goalCharacter == effectCharacter &&
@@ -243,70 +354,55 @@ function Character(name, handle, personality, loc, has, money) {
                     ) {score++;}
                 }
             }
-            
             //Attach a score to each legal action; higher scores indicate closer matches between desired effects and action effects.
             legalActionScore[i] = score; 
+            
         }
 
         //Remove actions that don't meet any of the character's desired goals. 
-        var deletionList = new Array();
+        //Remove actions and targets that have been already tried. 
+        var deletionList = []; 
         
-        for(i = 0; i < legalActions.length; i++) {
-            if (legalActionScore[i] < 1) {
-                deletionList.push(i);
+        for(i = 0; i < legalActions.length; i++) { 
+            if (legalActionScore[i] < 1) { deletionList.push(i); }
+            else if ( //If action and target are already tried, add to deletion list.
+                this.actionsTried.indexOf(legalActions[i]) != -1 &&
+                this.actionsTried.indexOf(legalActions[i]) == this.targetsTried.indexOf(legalTargets[i])
+                ) {
+                deletionList.push(i); 
             }
         } 
+
+
         
-        for(var i = deletionList.length-1; i >= 0; i--) {
+        for(var i = deletionList.length-1; i >= 0; i--) { 
+            //$("#simOutput").append("<hr>" +legalActions[deletionList[i]].name + " : " + legalTargets[deletionList[i]].name);
             legalActions.splice(deletionList[i], 1);
             legalActionScore.splice(deletionList[i], 1);
             legalTargets.splice(deletionList[i], 1);
         } 
-        
+
+        //If there are no legal actions available to perform, go to parent node. 
         if (legalActions.length < 1) { 
-            this.goalsTried.push(this.currGoal); //Remember that the character tried and failed to meet this goal.
-            var goalChildren = this.currGoal.child;
-            var childAccomplished = false;
 
-            if (goalChildren.length > 0 && this.currGoal.childLogic == "and") { //If goal has children, decompose to a child node the character has yet to accomplish.
-                for (var i = 0; i < goalChildren.length; i++) {
-                    if (this.goalsAccomplished.indexOf(gl[goalChildren[i]]) == -1) { 
-                        this.setCurrGoal(goalChildren[i]);
-                        goalIsFound = true;
-                    }
-                }
-            }
+            //Check if goal is killTibbs (overall goal).
+            if(this.currGoal == gl["killTibbs"] && !cl.tibbs.alive) {$("#simOutput").append("<hr>" +"Tibbs is dead!");}
 
-            //If child logic is "or", and no children are acomplished, chose untried child.
-            else if (goalChildren.length > 0 && this.currGoal.childLogic == "or") { 
+            $("#simOutput").append("<hr>" +this.name + " has no legal actions available to " + this.currGoal.name);
+            this.goalsTried.push(this.currGoal); //Remember that the character tried and failed to meet this goal.    
 
-                for (var i = 0; i < goalChildren.length; i++) { //Check for accomplished goals. 
-                    if (this.goalsAccomplished.indexOf(gl[goalChildren[i]]) != -1) { //If goal already accomplished, try parent or wait.
-                        childAccomplished = true; 
-                        if(!!this.currGoal.parent) {this.setCurrGoal(this.currGoal.parent);}
-                        else {this.setCurrGoal("wait");}
-                    }
-                }
-
-                if(!childAccomplished ) { //if no child has been accomplished, try untried child with personality pref.
-                    for (var i = 0; i < goalChildren.length; i++) {
-                        if (this.goalsTried.indexOf(gl[goalChildren[i]]) == -1 ) { 
-                            if(!!gl[goalChildren[i]].personality) {
-                                var pVector = this.getPersonality(gl[goalChildren[i]].personality);
-                                if (pVector > 0.4) {this.setCurrGoal(goalChildren[i]);}
-                            }
-                            //else {this.setCurrGoal(goalChildren[i]);}
-                            break;
-                        }
-                    } 
-                }
-            }
-            else if (this.currGoal.name != "wait") { //if character has no parent nodes, wait.
+            //Set currGoal to parent.
+            if(!!this.currGoal.parent) {
+                this.setCurrGoal(this.currGoal.parent);
+                this.plan();
+                return;
+            } else {
                 this.setCurrGoal("wait");
+                return;
             }
-            return "fail";
         }
-        //If there are legal actions available to perform...
+
+        //If there are legal actions to preform, choose best available actions based on desired effects. 
         else {
             //Sort best available action.
             var bestActionIndex = legalActions.length - 1;
@@ -318,12 +414,13 @@ function Character(name, handle, personality, loc, has, money) {
             
             //Cue up best action.
             this.setNextAction(legalActions[bestActionIndex], legalTargets[bestActionIndex]);
-            return "sucess";
+            return true;
         }
     }
+
     //Decide how to repsond to other char actions: askCharItem, etc.
     this.planResponse = function planResponse(targetChar, targetItem) {
-        var score, responses, bestIndex;
+        var score, responses, bestIndex; 
         
         //Create a array of repsonse actions.
         responses = [];
@@ -341,11 +438,6 @@ function Character(name, handle, personality, loc, has, money) {
                 case "tellAboutItem":
                     score[i] += this.personality.knd;
                     break;
-                case "lieAboutItem":
-                    score[i] -= this.personality.knd; //Subtract kindness
-                    score[i] -= this.personality.hon; //Subtract honesty
-                    score[i] += this.personality.van; //Add vanity
-                    break;
                 case "ignoreAsk":
                     score[i] -= this.personality.knd; //Subtract kindness
                     score[i] -= this.personality.hon; //Add honesty
@@ -360,9 +452,10 @@ function Character(name, handle, personality, loc, has, money) {
         }
 
         al[responses[bestIndex].name].setUser(this);
-        al[responses[bestIndex].name].setTarget(targetChar);
+        al[responses[bestIndex].name].setTarget(targetChar); 
         al[responses[bestIndex].name].setTargetItem(targetItem);
-        responses[bestIndex].effects();
+
+        return responses[bestIndex].effects();
     }
 
     //Decide details of particular actions: askAboutCharItem, etc.
@@ -379,7 +472,7 @@ function Character(name, handle, personality, loc, has, money) {
                 chars.push(this.knowledge[i].targetSubject); 
             }
         }
-
+        
         //Evaluate which character should be sought after, based on distance and affection. 
         score = [];
         for (var i = 0; i < chars.length; i++) {
@@ -411,6 +504,22 @@ function Character(name, handle, personality, loc, has, money) {
         for (i = 0; i < this.has.length; i++) { //Updating inventory locations. 
             this.has[i].loc = this.loc;
         }
+
+        //Check if black market is located here; if yes, character learns black market's loc.
+        if (targetLocation == il.blackMarket.loc) {
+            this.knowledge.push(new Knowledge(il.blackMarket, null, "loc", null, targetLocation));
+            $("#simOutput").append("<hr>" +this.name + " stumbles upon the black market");
+        }
+    }
+
+    this.responseQuest = function responseQuest(item) {
+        var result = this.checkKnow(item, "asked");
+        if(!!result) {
+            var response = result.name + " came arounding asking for it. That's all I know."
+            return response;
+        } else {
+            return "I don't know anything about that.";
+        }
     }
 
 }
@@ -436,7 +545,7 @@ Knowledge Class
 Constructor: (
     targetSubject       //character or item, e.g. Tibbs;
     indirectTarget      //for relationships' target character, otherwise null;
-    predicateType       //location, knowledge, relationship or personality, e.g. "personality";
+    predicateType       //location, has, knowledge, relationship or personality, e.g. "personality";
     predicateSub        //for relationship or personality sub-trait, otherwise null;
     value               //location, knowledge, relationship or personality value between -1 and 1. 
 )
@@ -477,6 +586,7 @@ Constructor: (
 function Item(name, loc, owner) {
     this.name           = name;
     this.loc            = loc;
+    this.owner          = owner;
 } 
 
 /*
@@ -490,6 +600,16 @@ Constructor: (
 function Loc(name, coordinates) {
     this.name           = name;
     this.coor           = coordinates;
+    this.marker;
+
+    this.hideMarker = function hideMarker() {
+        this.marker.setMap(null);
+    }
+
+    this.showMarker = function showMarker() {
+        this.marker.setMap(map);
+        map.panTo(new google.maps.LatLng(this.coor.lat, this.coor.long));
+    }
 }
 
 /*
@@ -573,24 +693,28 @@ function Action(name, preconditions, effectsDesc, effects, duration) {
                     if (character == "userChar") {character = this.userChar;}
                     var target = this.preconditions[i].value;
                     if (target == "targetChar") {target = this.targetChar;}
-                    var result = character.checkKnow(target, "loc");
+                    var result = (!character.checkKnow(target, "loc")) ? false : true;  //(character.checkKnow(target, "loc") ? true : false;
                     legalFlags.push(result);
                     break;
 
                 case "prox":
                     var character = this.preconditions[i].character;
+                    var value = this.preconditions[i].value;
+
                     if (character == "userChar") {character = this.userChar;}
                     else if (character == "targetChar") {character = this.targetChar;}
+                    
+                    if (value == "userChar") {value = this.userChar;}
+                    else if (value == "targetChar") {value = this.targetChar;}
 
-                    var result = this.userChar.checkProx(this.targetChar);
-                    result = (result == this.preconditions[i].value) ? true : false;
+                    var result = character.checkProx(value);                    
                     legalFlags.push(result);
                     break;
             }
         }  
         //If all legalFlags are true (all preconditions met), return true; else return false.
         if (legalFlags.indexOf(false) > -1) {return false;}
-        else {return true; console.log (this); }
+        else {return true; $("#simOutput").append (this); }
     }
 } 
 
@@ -677,6 +801,48 @@ function Player() {
         return this.accuracy;
     }
 
+}
+
+/*
+Player Class
+---
+Constructor: (
+    name                //goal's name
+    parent              //goal's parent in goal hierarchy
+    child               //goal's child in goal hierarchy
+    desired effects     //desired goal state
+
+)
+*/
+function Quest(name, img, loc, description, btn, next) {
+    this.name = name;
+    this.loc = loc;
+    this.img = img;
+    this.description = description;
+    this.btn = btn;
+    this.next = next;
+
+    this.show = function show() {
+        if (!!img) {
+            $('#map-canvas').slideUp();
+            $('#questTop').html("<img src='./img/" + this.img + "'/>");
+            $('#questTop').show();
+        } else {
+            $('#map-canvas').slideDown();
+            this.loc.showMarker();
+            $('#questTop').hide();
+        }
+        
+        $('#questMessage').html("<h2>"+this.name+"</h2><p>"+this.description+"</p>");
+
+        this.next(); 
+
+        $('#btns').html("");
+        for(i = 0; i < this.btn.length; i+=2) {
+            $('#btns').append("<div class='btn' onclick='goToQuest("+ this.btn[i+1] +")'>"+ this.btn[i] +"</div>");    
+        }
+        
+    }
 }
 
 

@@ -4,6 +4,9 @@ var stage;
 var stage_state = "root";
 var map; 
 
+var simSwitch = false;
+var currQuest, currChar;
+
 var player = new Player(); //Holds information for completed quests, current geolocation, etc.
 
 var sw = 320; //Screen width, iPhone 5
@@ -12,10 +15,11 @@ var sh = 568; //Screen height, iPhone 5
 var ll = new Object(); //Location library
 var il = new Object(); //Item library
 var cl = new Object(); //Characters library
+var ql = new Object(); //Quest library
 
 //Quest declarations
-var quest1,quest2,quest3,quest4,deathInfo;
-var tool,crimescene,killer;
+var quest1, quest2, quest3, quest4, deathInfo;
+var weapon, crimeScene, murderer;
 
 //Location declarations
 var locationMarkers = [];
@@ -28,13 +32,16 @@ var watchSwitch = false;
 
 //Global Functions
 //__________________________________
-function init() {
+function init() { 
 	//Initializaing...  
 	//Locations
 	initLoc();
 
 	//Items
 	initItem();
+	//Generate random loc for black market;
+	var randomLoc = randomProp(ll); 
+	il.blackMarket = new Item("Black Market", ll["library"], null);
 
 	//Characters, relations and knowledge
 	initChar();
@@ -55,13 +62,16 @@ function init() {
 
 	//For Testing
 	//__________________________________
+    cl.tibbs.setCurrGoal("wait");
+
     cl.rivers.addItem(il.ammo);
     cl.rivers.setCurrGoal("killTibbs");
-    cl.tibbs.setCurrGoal("wait");
-    cl.elis.setCurrGoal("wait");
+    cl.elis.setCurrGoal("killTibbs");
+    cl.bryce.setCurrGoal("killTibbs");
+    cl.meeks.setCurrGoal("killTibbs");
     cl.boomer.setCurrGoal("wait");
 
-    //initSim();
+    initSim();
 }
 
 //Map, map functions
@@ -76,7 +86,6 @@ function initMap(){
     for (i in ll){
     	var marker = new google.maps.Marker({
     		position: new google.maps.LatLng(ll[i].coor.lat, ll[i].coor.long),
-    		map: map,
     		title: ll[i].name
 		});
 		google.maps.event.addListener(marker, 'click', function() {
@@ -86,7 +95,7 @@ function initMap(){
   			});
     		infowindow.open(map,this);
 		});
-		locationMarkers.push(marker);
+		ll[i].marker = marker;
     }
 
     //Styling map
@@ -218,7 +227,7 @@ function geolocSuccess(pos) {
 	var distance = google.maps.geometry.spherical.computeDistanceBetween(locCoords, player.position);
 	
 
-	if (distance < 200) {alert("You're here! You're " + distance + " meters away.");}
+	if (distance < 100) {alert("You're here! You're " + distance + " meters away.");}
 	else {alert("Nope! You're " + distance + " meters away.");}
 	
 }
@@ -238,16 +247,19 @@ function geolocWatch() { //For constant geoloc information.
 
 function updateMap(pos) {
 	player.setCoords(pos);
-	console.log(pos);
+	$("#simOutput").append("<hr>" +pos);
 }
 
 //Simulation
 //__________________________________
 function initSim() {
+	$("#simOutput").append("<hr>" +"The black market is hidden near the " + il.blackMarket.loc.name);
+
+	//Initiate simulation
 	currTime = 0;
-	while (currTime < 100) { //Iterate while tibbs is still alive.
+	while (cl.tibbs.alive && currTime < 500) { //Iterate while tibbs is still alive.
 		for (var cName in cl) { //For each character...
-			if(cl[cName].alive) {
+			if(cl[cName].alive && cl[cName].currGoal != gl["wait"]) {
 				if (cl[cName].nextAction == null) {cl[cName].plan();}
 				else if (cl[cName].actionTimer > 0) {cl[cName].actionTimer--;}
 				else {cl[cName].performAction();}
@@ -256,14 +268,37 @@ function initSim() {
 		currTime++;
 	} 
 	
-	var questGen = new questGenerator(tool, killer, crimescene);
+	initQuests();
+	currQuest = 0;
+	currChar = cl.bryce;
+	ql[currQuest].show();
+	
+	//var questGen = new questGenerator(tool, murderer, crimescene);
 }
 
-//Button interface, functions
+//Button interface
+//__________________________________
 $('#startSimulation_btn').click(function () {
 	//document.getElementById('stage').style.display="none";
 	//document.getElementById('quest').style.display="initial";
 	initSim();
+});
+
+$('#simBtn').click(function(){
+	if(simSwitch) {
+		$('#simBtn').html("Show Simulation");
+		$('#simOutput').hide();
+		simSwitch = false;
+	} else {
+		$('#simBtn').html("Hide Simulation");
+		$('#simOutput').show();
+		simSwitch = true;
+	}
+});
+
+$('#btn').click(function() {
+	currQuest++;
+	ql[currQuest].show();
 });
 
 $('#next_btn').click(function () {
@@ -283,3 +318,19 @@ $('#next_quest').click(function () {
 	document.getElementById('stage').style.display="none";
 	document.getElementById('quest').style.display="initial";
 });
+
+//Misc. Functions
+//__________________________________
+function randomProp(obj) {
+    var result;
+    var count = 0;
+    for (var prop in obj)
+        if (Math.random() < 1/++count)
+           result = prop;
+    return result;
+}
+
+function goToQuest(quest) {
+	currQuest = quest;
+	ql[currQuest].show();	
+}
